@@ -1,6 +1,13 @@
-public class Order
+public class OrderTable
 {
-    int[] order;
+    public int Serial { get; private set; }
+    public int[] Order { get; private set; }
+
+    public OrderTable(int number, int[] array)
+    {
+        Serial = number;
+        Order = array;
+    }
 }
 
 public class ToppingFlag
@@ -18,6 +25,6 @@ public class ToppingFlag
 
     public bool HasFlag(int flag)
     {
-        return current % flag == 0; 
+        return current % flag == 0;
     }
 }

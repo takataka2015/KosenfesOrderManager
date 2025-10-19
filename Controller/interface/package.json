@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "tsx":"npx tsx component/utility/debug.ts"
   },
   "dependencies": {
     "react": "19.1.0",

@@ -1,23 +1,23 @@
 {
-    "menu": [
+    "data": [
         {
-            "name": "シーフード",
+            "item": "シーフード",
             "price": 200
         },
         {
-            "name": "肉",
+            "item": "肉",
             "price": 200
         },
         {
-            "name": "野菜",
+            "item": "野菜",
             "price": 200
         },
         {
-            "name": "タマゴ",
+            "item": "タマゴ",
             "price": 100
         },
         {
-            "name": "チーズ",
+            "item": "チーズ",
             "price": 100
         }
     ]

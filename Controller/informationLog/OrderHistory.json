@@ -1,0 +1,11 @@
+{
+ "serial": 1,
+ "casherId": 3,
+ "order": [
+  2,
+  3
+ ],
+ "paymentType": 2,
+ "receptionTime": 1760939410874,
+ "price": 0
+}

@@ -1,11 +1,24 @@
-{
- "serial": 1,
- "casherId": 3,
- "order": [
-  2,
-  3
- ],
- "paymentType": 2,
- "receptionTime": 1760939410874,
- "price": 0
-}
+[
+    {
+        "serial": 1,
+        "casherId": 3,
+        "order": [
+            2,
+            3
+        ],
+        "paymentType": 2,
+        "receptionTime": 1760939410874,
+        "price": 0
+    },
+    {
+        "serial": 1,
+        "casherId": 3,
+        "order": [
+            2,
+            3
+        ],
+        "paymentType": 2,
+        "receptionTime": 1760969605497,
+        "price": 0
+    }
+]

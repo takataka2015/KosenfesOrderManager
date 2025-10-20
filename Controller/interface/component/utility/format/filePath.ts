@@ -1,17 +1,17 @@
-import FilePathJson from "./filePathConfig.json";
+import FilePathJson from "../config/filePathConfig.json";
 
-class OrderFile{
-    get Now():string{
-        return FilePathJson.filePlace+FilePathJson.fileName.now;
+class OrderFile {
+    get Now(): string {
+        return FilePathJson.filePlace + FilePathJson.fileName.now + ".json";
     }
-    get History():string{
-        return FilePathJson.filePlace+FilePathJson.fileName.history;
+    get History(): string {
+        return FilePathJson.filePlace + FilePathJson.fileName.history + ".json";
     }
 }
 
-export class FilePath{
-    order:OrderFile=new OrderFile();
-    get Attendance():string{
-        return FilePathJson.filePlace+FilePathJson.fileName.attend;
+export class FilePath {
+    order: OrderFile = new OrderFile();
+    get Attendance(): string {
+        return FilePathJson.filePlace + FilePathJson.fileName.attend + ".json";
     }
 }

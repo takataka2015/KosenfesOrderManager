@@ -1,8 +1,8 @@
 import fs from 'fs';
 import { FilePath } from './format/filePath';
-import MenuJson from "./config/menuConfig.json";
+import MenuJson from "../../../informationLog/config/menuConfig.json";
 import { Menu } from "./format/menu";
-import EmployeeJson from "./config/employeeList.json";
+import EmployeeJson from "../../../informationLog/config/employeeList.json";
 import { Employee } from "./format/employee";
 
 export class OrderManager {

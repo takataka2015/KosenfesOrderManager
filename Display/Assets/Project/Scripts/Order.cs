@@ -1,3 +1,16 @@
+using System;
+
+public class OrderFilePath
+{
+    const string filePlace = "../Controller/informationLog/";
+    const string nowFileName = "OrderNow";
+    const string requestFileName = "OrderClearRequest";
+
+    public string now { get; private set; } = filePlace + nowFileName + ".json";
+    public string request { get; private set; } = filePlace + requestFileName + ".json";
+}
+
+[Serializable]
 public class OrderTable
 {
     public int Serial { get; private set; }
@@ -7,24 +20,5 @@ public class OrderTable
     {
         Serial = number;
         Order = array;
-    }
-}
-
-public class ToppingFlag
-{
-    public const int Seafood = 2;
-    public const int Meat = 3;
-    public const int Vegetable = 5;
-    public const int Cheese = 7;
-    int current;
-
-    ToppingFlag(int order)
-    {
-        current = order;
-    }
-
-    public bool HasFlag(int flag)
-    {
-        return current % flag == 0;
     }
 }

@@ -1,25 +1,25 @@
 [
-    {
-        "serial": 2,
-        "casherId": 4,
-        "order": [
-            4,
-            5,
-            1
-        ],
-        "paymentType": 3,
-        "receptionTime": 1760969605497,
-        "price": 0
-    },
-    {
-        "serial": 3,
-        "casherId": 4,
-        "order": [
-            4,
-            1
-        ],
-        "paymentType": 3,
-        "receptionTime": 1760969605498,
-        "price": 0
-    }
+ {
+  "serial": 2,
+  "casherId": 4,
+  "order": [
+   4,
+   5,
+   1
+  ],
+  "paymentType": 3,
+  "receptionTime": 1761013015926,
+  "price": 0
+ },
+ {
+  "serial": 3,
+  "casherId": 4,
+  "order": [
+   4,
+   1
+  ],
+  "paymentType": 3,
+  "receptionTime": 1761013015926,
+  "price": 0
+ }
 ]

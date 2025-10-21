@@ -5,7 +5,7 @@ using UnityEngine;
 public class OrderManager : MonoBehaviour
 {
     [SerializeField] GameObject orderTable;
-    OrderFilePath filePath=new();
+    OrderFilePath filePath = new();
     GameObject[] tables;
     OrderTable[] order;
 
@@ -23,7 +23,7 @@ public class OrderManager : MonoBehaviour
 
     void ReadOrderJson()
     {
-        order=JsonUtility.FromJson<OrderTable[]>(File.ReadAllText(filePath.now, System.Text.Encoding.UTF8));
+        order = JsonUtility.FromJson<OrderTable[]>(File.ReadAllText(filePath.Now, System.Text.Encoding.UTF8));
         Debug.Log(order);
     }
 }

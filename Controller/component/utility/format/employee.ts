@@ -2,10 +2,10 @@ export class Employee {
     private id: number;
     private name: string
 
-    get Id():number{
+    get Id(): number {
         return this.id;
     }
-    get Name():string{
+    get Name(): string {
         return this.name;
     }
 

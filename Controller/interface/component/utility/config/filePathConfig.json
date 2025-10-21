@@ -1,8 +1,0 @@
-{
-    "filePlace":"../informationLog/",
-    "fileName":{
-        "attend":"Attendance",
-        "history":"OrderHistory",
-        "now":"OrderNow"
-    }
-}

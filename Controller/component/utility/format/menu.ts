@@ -3,13 +3,13 @@ export class Menu {
     private price: number;
     private flag: number;
 
-    get Item():string{
+    get Item(): string {
         return this.item;
     }
-    get Price():number{
+    get Price(): number {
         return this.price;
     }
-    get Flag():number{
+    get Flag(): number {
         return this.flag;
     }
 
@@ -19,7 +19,7 @@ export class Menu {
         this.flag = this.PrimeFind(index);
     }
 
-    PrimeFind(number: number): number {
+    private PrimeFind(number: number): number {
         let i: number = 2;
         let primeArray: number[] = [i];
         while (primeArray.length <= number) {

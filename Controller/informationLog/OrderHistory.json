@@ -21,4 +21,24 @@
         "receptionTime": 1760969605497,
         "price": 0
     }
-]
+]{
+ "serial": 1,
+ "casherId": 3,
+ "order": [
+  2,
+  3
+ ],
+ "paymentType": 2,
+ "receptionTime": 1761012719641,
+ "price": 0
+}{
+ "serial": 1,
+ "casherId": 3,
+ "order": [
+  2,
+  3
+ ],
+ "paymentType": 2,
+ "receptionTime": 1761013015925,
+ "price": 0
+}

@@ -6,8 +6,8 @@ public class OrderFilePath
     const string nowFileName = "OrderNow";
     const string requestFileName = "OrderClearRequest";
 
-    public string now { get; private set; } = filePlace + nowFileName + ".json";
-    public string request { get; private set; } = filePlace + requestFileName + ".json";
+    public string Now { get; private set; } = filePlace + nowFileName + ".json";
+    public string Request { get; private set; } = filePlace + requestFileName + ".json";
 }
 
 [Serializable]

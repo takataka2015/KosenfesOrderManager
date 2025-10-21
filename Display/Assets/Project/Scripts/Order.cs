@@ -10,7 +10,6 @@ public class OrderFilePath
     public string Request { get; private set; } = filePlace + requestFileName + ".json";
 }
 
-[Serializable]
 public class OrderTable
 {
     public int Serial { get; private set; }
@@ -21,4 +20,17 @@ public class OrderTable
         Serial = number;
         Order = array;
     }
+}
+
+[Serializable]
+public class Orders
+{
+    public OrderJson[] orders;
+}
+
+[Serializable]
+public class OrderJson
+{
+    public int serial;
+    public int[] order;
 }

@@ -7,9 +7,11 @@ timeCard.ClockIn(71000);
 setTimeout(() => {
     timeCard.ClockOut(71000);
     console.log(timeCard.attend[0].workingTime);
+}, 5000);
+setTimeout(() => {
+    timeCard.ClockIn(71000);
 }, 10000);
-manager.AddOrder(1, 3, 2, [2, 3]);
-manager.AddOrder(2, 4, 3, [4, 5, 1]);
-manager.AddOrder(3, 4, 3, [4, 1]);
-manager.RemoveOrder(0);
-console.log(manager.order);
+setTimeout(() => {
+    console.log(timeCard.attend[0].workingTime);
+}, 15000);
+//console.log(timeCard.attend[0].workingTime);

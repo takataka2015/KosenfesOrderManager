@@ -2,7 +2,8 @@
     "filePlace": "./informationLog/",
     "fileName": {
         "attend": "Attendance",
+        "now": "OrderNow",
         "history": "OrderHistory",
-        "now": "OrderNow"
+        "request": "OrderClearRequest"
     }
 }

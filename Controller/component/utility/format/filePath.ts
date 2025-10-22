@@ -7,6 +7,9 @@ class OrderFile {
     get History(): string {
         return FilePathJson.filePlace + FilePathJson.fileName.history + ".json";
     }
+    get Request(): string {
+        return FilePathJson.filePlace + FilePathJson.fileName.request + ".json";
+    }
 }
 
 export class FilePath {

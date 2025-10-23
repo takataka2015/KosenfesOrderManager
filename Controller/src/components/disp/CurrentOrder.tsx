@@ -43,24 +43,25 @@ export default function CurrentOrder() {
       <div className="w-full flex-1 flex flex-col items-start overflow-y-auto pb-40">
         <div className="w-full flex flex-col items-start pb-3" id="order-list">
           {orderManager.orderTable.at(-1)?.order.map((flag, index) => {
+            const outerKey = `order-item-${index}`;
             return (
-              <div className="w-full flex flex-col justify-start border-t-2 pl-1 pb-2">
+              <div
+                key={outerKey}
+                className="w-full flex flex-col justify-start border-t-2 pl-1 pb-2"
+              >
                 <div className="font-bold">{index}. 焼うどん</div>
                 {orderManager.menu
                   .filter((element) => {
-                    //なんか実行できん
-                    //return flag.HasFlag(element.Flag);
                     return element.Flag == ((flag.flag ?? 0) & element.Flag);
                   })
-                  .map((element, index) => (
-                    <div className="w-full flex flex-row justify-between border-t-1 border-dashed px-2 font-regular">
-                      <div key={index} className="flex">
-                        {element.Item}
-                      </div>
+                  .map((element, subIndex) => (
+                    <div
+                      key={`${element.Flag ?? element.Item}-${subIndex}`}
+                      className="w-full flex flex-row justify-between border-t-1 border-dashed px-2 font-regular"
+                    >
+                      <div className="flex">{element.Item}</div>
 
-                      <div key={index} className="flex">
-                        ￥{element.Price}
-                      </div>
+                      <div className="flex">￥{element.Price}</div>
                     </div>
                   ))}
               </div>

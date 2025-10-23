@@ -4,10 +4,10 @@ import { OrderManager } from "../../../component/utility/OrderManager";
 type OrderNowItem = {
   serial: number;
   casherId: number;
-  order: number[];
+  order: { flag: number }[];
   paymentType: number;
   receptionTime: number;
-  price: number;
+  price?: number;
 };
 
 const orderManager = new OrderManager();
@@ -16,6 +16,21 @@ const findNum = 1;
 export default function CurrentOrder() {
   const items = orderNowData as OrderNowItem[];
   const _serial = items.find((x) => x.serial === findNum);
+
+  // flag 配列からメニュー価格を合計する。
+  const calcTotalFromOrder = (order: { flag: number }[]) => {
+    let total = 0;
+    order.forEach((o) => {
+      const f = o.flag;
+      orderManager.menu.forEach((m) => {
+        // Menu.Flag はビットフラグ（2 のべき乗）で設定されている想定
+        if ((m.Flag & f) !== 0) total += m.Price;
+      });
+    });
+    return total;
+  };
+
+  const total = _serial ? calcTotalFromOrder(_serial.order) : 0;
 
   return (
     <div className="flex flex-col gap-4 h-screen">
@@ -98,7 +113,7 @@ export default function CurrentOrder() {
         <div className="w-full border-t-2 font-bold p-2">
           合計
           <div className="w-95/100 flex flex-col items-end border-t-1 border-dashed text-xl">
-            ￥908
+            ￥{total.toLocaleString()}
           </div>
           <div className="w-full flex justify-end py-2">
             <button

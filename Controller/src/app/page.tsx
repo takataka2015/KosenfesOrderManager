@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div className="font-sans flex flex-row min-h-screen ">
       {/* 現在注文内容 */}
-      <div className="bg-amber-300 flex flex-col min-h-screen w-25/100 min-w-50">
+      <div className="bg-amber-300 flex flex-col justify-between min-h-screen w-25/100 min-w-50">
         <CurrentOrder />
       </div>
 

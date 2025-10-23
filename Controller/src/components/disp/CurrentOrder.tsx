@@ -1,4 +1,5 @@
 import orderNowData from "../../../informationLog/OrderNow.json";
+import { OrderManager } from "../../../component/utility/OrderManager";
 
 type OrderNowItem = {
   serial: number;
@@ -9,49 +10,100 @@ type OrderNowItem = {
   price: number;
 };
 
-let findnum = 1;
+const orderManager = new OrderManager();
+const findNum = 1;
 
 export default function CurrentOrder() {
   const items = orderNowData as OrderNowItem[];
-  const serial = items.find((x) => x.serial === findnum);
+  const _serial = items.find((x) => x.serial === findNum);
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="bg-amber-500 p-3 flex justify-center font-semibold">
+    <div className="flex flex-col gap-4 h-screen">
+      <div className="bg-amber-500 p-3 flex justify-center font-semibold sticky top-0 z-10">
         現在の注文
       </div>
 
-      <div className="flex flex-col items-start">
-        <div className="w-9/10 flex flex-col items-start pb-3">
-          <div className="w-full flex justify-start border-t-2 font-bold pl-1">
-            やきうどん
+      <div className="flex-1 flex flex-col items-start overflow-y-auto">
+        <div className="w-full flex flex-col items-start pb-3">
+          <div className="w-full flex flex-col justify-start border-t-2 pl-1">
+            {orderManager.menu.map((m, idx) => (
+              <div
+                key={idx}
+                className="w-full flex justify-between border-t-1 border-dashed px-2 py-1"
+              >
+                <span>{m.Item}</span>
+                <span className="font-normal">¥{m.Price}</span>
+              </div>
+            ))}
           </div>
-          <div className="w-full flex justify-start border-t-1 border-dashed pl-3">
-            いちご
+          <div className="w-full flex flex-col justify-start border-t-2 pl-1">
+            {orderManager.menu.map((m, idx) => (
+              <div
+                key={idx}
+                className="w-full flex justify-between border-t-1 border-dashed px-2 py-1"
+              >
+                <span>{m.Item}</span>
+                <span className="font-normal">¥{m.Price}</span>
+              </div>
+            ))}
           </div>
-          <div className="w-full flex justify-start border-t-1 border-dashed pl-3">
-            ずっとマヨネーズでいいのに。
+          <div className="w-full flex flex-col justify-start border-t-2 pl-1">
+            {orderManager.menu.map((m, idx) => (
+              <div
+                key={idx}
+                className="w-full flex justify-between border-t-1 border-dashed px-2 py-1"
+              >
+                <span>{m.Item}</span>
+                <span className="font-normal">¥{m.Price}</span>
+              </div>
+            ))}
+          </div>
+          <div className="w-full flex flex-col justify-start border-t-2 pl-1">
+            {orderManager.menu.map((m, idx) => (
+              <div
+                key={idx}
+                className="w-full flex justify-between border-t-1 border-dashed px-2 py-1"
+              >
+                <span>{m.Item}</span>
+                <span className="font-normal">¥{m.Price}</span>
+              </div>
+            ))}
+          </div>
+          <div className="w-full flex flex-col justify-start border-t-2 pl-1">
+            {orderManager.menu.map((m, idx) => (
+              <div
+                key={idx}
+                className="w-full flex justify-between border-t-1 border-dashed px-2 py-1"
+              >
+                <span>{m.Item}</span>
+                <span className="font-normal">¥{m.Price}</span>
+              </div>
+            ))}
+          </div>
+          <div className="w-full flex flex-col justify-start border-t-2 pl-1">
+            {orderManager.menu.map((m, idx) => (
+              <div
+                key={idx}
+                className="w-full flex justify-between border-t-1 border-dashed px-2 py-1"
+              >
+                <span>{m.Item}</span>
+                <span className="font-normal">¥{m.Price}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* デバッグ用…？ */}
-      <div className="p-3 border rounded">
-        <div className="font-bold">serial={findnum}</div>
-        {serial ? (
-          <div className="mt-2 text-sm">
-            <div>casherId: {serial.casherId}</div>
-            <div>order: {serial.order.join(", ")}</div>
-            <div>paymentType: {serial.paymentType}</div>
-            <div>receptionTime: {serial.receptionTime}</div>
-            <div>price: {serial.price}</div>
+      <div className="fixed flex flex-col items-start h-20 bottom-0 left-0 w-25/100 min-w-50 bg-amber-400 shadow-lg">
+        <div className="w-full border-t-2 font-bold p-2">
+          合計
+          <div className="w-95/100 flex flex-col items-end border-t-1 border-dashed text-xl">
+            ￥908
           </div>
-        ) : (
-          <div className="text-red-600">
-            serial={findnum} の注文が見つかりません。
-          </div>
-        )}
+        </div>
       </div>
+      {/* 固定フッターの高さ分の空白を追加 */}
+      <div className="h-16"></div>
     </div>
   );
 }

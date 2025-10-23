@@ -1,5 +1,6 @@
 import Image from "next/image";
-import Timecard from "../../component/utility/TimeCard";
+//import Timecard from "../../component/utility/TimeCard";
+import EmployeeList from "./employeeList";
 
 export default function Home() {
   return (

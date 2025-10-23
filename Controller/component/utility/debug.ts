@@ -3,15 +3,26 @@ import { OrderManager } from "./OrderManager";
 
 const manager = new OrderManager();
 const timeCard = new TimeCard();
-timeCard.ClockIn(71000);
-setTimeout(() => {
-    timeCard.ClockOut(71000);
-    console.log(timeCard.attend[0].workingTime);
-}, 5000);
-setTimeout(() => {
-    timeCard.ClockIn(71000);
-}, 10000);
-setTimeout(() => {
-    console.log(timeCard.attend[0].workingTime);
-}, 15000);
-//console.log(timeCard.attend[0].workingTime);
+console.log(true);
+manager.AddOrder(1,1,2);
+manager.orderTable.at(-1)?.Additem();
+manager.orderTable.at(-1)?.Additem();
+manager.orderTable.at(-1)?.order[0].AddFlag(2);
+manager.orderTable.at(-1)?.order[1].AddFlag(1);
+manager.orderTable.at(-1)?.order[1].AddFlag(4);
+manager.AddOrder(2,2,1);
+manager.orderTable.at(-1)?.Additem();
+manager.orderTable.at(-1)?.Additem();
+manager.orderTable.at(-1)?.order[0].AddFlag(4);
+manager.orderTable.at(-1)?.order[0].AddFlag(8);
+manager.orderTable.at(-1)?.order[1].AddFlag(4);
+manager.AddOrder(3,2,1);
+manager.orderTable.at(-1)?.Additem();
+manager.orderTable.at(-1)?.Additem();
+manager.orderTable.at(-1)?.Additem();
+manager.orderTable.at(-1)?.order[0].AddFlag(2);
+manager.orderTable.at(-1)?.order[1].AddFlag(4);
+manager.orderTable.at(-1)?.order[2].AddFlag(1);
+manager.WriteOrder();
+manager.ClearRequestCheck();
+console.log(manager.orderTable);

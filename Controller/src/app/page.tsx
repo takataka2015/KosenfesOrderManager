@@ -1,20 +1,16 @@
 import Image from "next/image";
-//import Timecard from "../../component/utility/TimeCard";
-import EmployeeList from "./employeeList";
+import CurrentOrder from "../components/disp/CurrentOrder";
 
 export default function Home() {
   return (
-    <>
-    <h1>タイムカード</h1>
-    <p>出退勤を行う際は必ず操作を行ってください</p>
-    <button>出勤</button>
-    <button>退勤</button>
-    <h2>現在出勤者リスト</h2>
-    <table>
-      <li>
-        高専太郎
-      </li>
-    </table>
-    </>
+    <div className="font-sans flex flex-row min-h-screen ">
+      {/* 現在注文内容 */}
+      <div className="bg-amber-300 flex flex-col min-h-screen w-25/100 min-w-50">
+        <CurrentOrder />
+      </div>
+
+      {/* 入力部 */}
+      <div className="bg-blue-300 grid min-h-screen w-75/100">bb</div>
+    </div>
   );
 }

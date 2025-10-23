@@ -1,4 +1,4 @@
-import FilePathJson from "../config/filePathConfig.json";
+import FilePathJson from "../fileConfig/filePathConfig.json";
 
 class OrderFile {
     get Now(): string {
@@ -6,6 +6,9 @@ class OrderFile {
     }
     get History(): string {
         return FilePathJson.filePlace + FilePathJson.fileName.history + ".json";
+    }
+    get Request(): string {
+        return FilePathJson.filePlace + FilePathJson.fileName.request + ".json";
     }
 }
 

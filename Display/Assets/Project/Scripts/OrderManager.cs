@@ -6,18 +6,18 @@ using UnityEngine;
 
 public class OrderManager : MonoBehaviour
 {
-    [SerializeField] GameObject orderTable;
+    [SerializeField] GameObject table;
     GameObject[] tables;
     OrderFilePath filePath = new();
-    List<OrderTable> order = new();
-    int count = 0;
-    const int interval = 50;
+    List<OrderTable> orderTable = new();
+    int count=0;
+    const int interval=50;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         ReadOrderJson();
-        ClearRequest(1);
+        ClearRequest(2);
     }
 
     void FixedUpdate()
@@ -33,7 +33,6 @@ public class OrderManager : MonoBehaviour
         }
     }
 
-
     int ClearRequest(int serial)
     {
         List<int> request = new();
@@ -41,7 +40,7 @@ public class OrderManager : MonoBehaviour
         {
             request.Add(serialJson);
         }
-        if (order.FindIndex(element => element.Serial == serial) != -1)
+        if (orderTable.FindIndex(element => element.Serial == serial) != -1)
         {
             request.Add(serial);
             File.WriteAllText(filePath.Request, JsonUtility.ToJson(new SerialJson(request.ToArray())));
@@ -57,7 +56,7 @@ public class OrderManager : MonoBehaviour
     {
         foreach (OrderJson orderJson in JsonUtility.FromJson<Orders>(@"{""orders"":" + File.ReadAllText(filePath.Now, System.Text.Encoding.UTF8) + "}").orders)
         {
-            order.Add(new OrderTable(orderJson.serial, orderJson.order));
+            orderTable.Add(new OrderTable(orderJson.serial, orderJson.order.ToList().Select(element => element.flag).ToArray()));
         }
     }
 }

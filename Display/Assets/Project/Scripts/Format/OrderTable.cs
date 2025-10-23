@@ -22,5 +22,11 @@ public class Orders
 public class OrderJson
 {
     public int serial;
-    public int[] order;
+    public Flag[] order;
+}
+
+[Serializable]
+public class Flag
+{
+    public int flag;
 }

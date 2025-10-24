@@ -1,30 +1,21 @@
-// "use client";
+"use client";
 import { Menu } from "../../../component/utility/format/menu";
 import orderNowData from "../../../informationLog/OrderNow.json";
 import { OrderManager } from "../../../component/utility/OrderManager";
+import { OrderTable, Flag } from "../../../component/utility/OrderTable";
+import Order from "./Order";
+import { useEffect, useState } from "react";
 
-type OrderNowItem = {
-  serial: number;
-  casherId: number;
-  order: { flag: number }[];
-  paymentType: number;
-  receptionTime: number;
-  price?: number;
-};
+export default function CurrentOrder({ order }: { order: any }) {
+  const orderManager = new OrderManager();
+  orderManager.ReadOrder(order);
 
-const orderManager = new OrderManager();
-
-orderManager.ReadOrder();
-
-const findNum = 1;
-
-export default function CurrentOrder() {
-  const items = orderNowData as OrderNowItem[];
-  const _serial = items.find((x) => x.serial === findNum);
-  const moneyCalc = (menu: Menu[], flag: number) =>
-    menu
-      .filter((element: Menu) => element.Flag == (element.Flag & flag))
+  const moneyCalc = (menu: Menu[], flag: Flag) => {
+    return menu
+      .filter((element: Menu) => flag.HasFlag(element.Flag ?? 0))
       .reduce((previous: number, current: Menu) => previous + current.Price, 0);
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <div className="bg-amber-500 p-3 flex justify-center font-semibold sticky top-0 z-10">
@@ -32,41 +23,16 @@ export default function CurrentOrder() {
       </div>
       <div className="w-full flex-1 flex flex-col items-start overflow-y-auto pb-40">
         <div className="w-full flex flex-col items-start pb-3" id="order-list">
-          {orderManager.orderTable.at(-1)?.order.map((flag, index) => {
-            const outerKey = `order-item-${index}`;
-            return (
-              <div
-                key={outerKey}
-                className="w-full flex flex-col justify-start border-t-2 pl-1 pb-2"
-              >
-                <div className="font-bold flex justify-between items-center">
-                  {index}. 焼うどん
-                  <button
-                    className="w-15 h-10 rounded-md bg-amber-400
-                   hover:bg-amber-500 active:bg-amber-600"
-                  >
-                    選択
-                  </button>
-                </div>
-                {orderManager.menu
-                  .filter((element) => {
-                    return element.Flag == ((flag.flag ?? 0) & element.Flag);
-                  })
-                  .map((element, subIndex) => {
-                    return (
-                      <span
-                        key={`${element.Flag ?? element.Item}-${subIndex}`}
-                        className="w-full flex flex-row justify-between border-t-1 border-dashed px-2 font-regular"
-                      >
-                        <span className="flex">{element.Item}</span>
-
-                        <span className="flex">￥{element.Price}</span>
-                      </span>
-                    );
-                  })}
-              </div>
-            );
-          })}
+          {orderManager.orderTable
+            .at(-1)
+            ?.order.map((flag: Flag, index: number) => (
+              <Order
+                key={index}
+                index={index}
+                flag={flag}
+                menu={orderManager.menu}
+              />
+            ))}
         </div>
       </div>
 
@@ -79,7 +45,7 @@ export default function CurrentOrder() {
               .at(-1)
               ?.order.reduce(
                 (previous, current) =>
-                  previous + moneyCalc(orderManager.menu, current.flag),
+                  previous + moneyCalc(orderManager.menu, current),
                 0
               )}
           </div>

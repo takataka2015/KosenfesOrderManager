@@ -1,5 +1,5 @@
-import Image from "next/image";
 import CurrentOrder from "../components/disp/CurrentOrder";
+import ControllPanel from "../components/disp/ControllPanel";
 
 export default function Home() {
   return (
@@ -10,7 +10,9 @@ export default function Home() {
       </div>
 
       {/* 入力部 */}
-      <div className="bg-blue-300 grid min-h-screen w-75/100">bb</div>
+      <div className="bg-blue-300 grid min-h-screen w-75/100">
+        <ControllPanel />
+      </div>
     </div>
   );
 }

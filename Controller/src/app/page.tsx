@@ -1,6 +1,5 @@
-import Image from "next/image";
 import CurrentOrder from "../components/disp/CurrentOrder";
-import Link from 'next/link';
+import ControllPanel from "../components/disp/ControllPanel";
 
 export default function Home() {
   return (
@@ -11,11 +10,9 @@ export default function Home() {
       </div>
 
       {/* 入力部 */}
-      <div className="bg-blue-300 grid min-h-screen w-75/100">bb</div>
-
-      <Link href={"/employeeManagement"}>
-        タイムカード
-      </Link>
+      <div className="bg-blue-300 grid min-h-screen w-75/100">
+        <ControllPanel />
+      </div>
     </div>
   );
 }

@@ -5,14 +5,15 @@ import ControllPanel from "../components/disp/ControllPanel";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  let [order, setOrder] = useState(null);
+  let [order, setOrder] = useState<any[] | undefined>(undefined);
 
   // 初めてページが読み込まれたとき
   useEffect(() => {
     // 現在のオーダー内容を取得する
-    fetch("/api/readOrder/")
+    fetch("/api/readOrder")
       .then((res) => res.json())
-      .then((data) => setOrder(data));
+      .then((data) => setOrder(data))
+      .catch(() => setOrder(undefined));
   }, []);
 
   return (

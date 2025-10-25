@@ -5,41 +5,34 @@ export default function Order({
   index,
   flag,
   menu,
-  onRemoveFlag,
-  basePrice,
+  onRemove,
 }: {
   index: number;
   flag: Flag;
   menu: Menu[];
-  onRemoveFlag: (flagValue: number) => void; // 追加
-  basePrice: number;
+  onRemove: (rowIndex: number) => void;
 }) {
   return (
-    <div
-      key={index}
-      className="w-full flex flex-col justify-start border-t-2 pl-1 pb-2"
-    >
+    <div className="w-full flex flex-col justify-start border-t-2 pl-1 pb-2">
       <div className="font-bold flex justify-between items-center">
         {index}. 焼うどん
-        <span>￥{basePrice}</span>
         <button
-          className="w-15 h-10 rounded-md bg-amber-400
-                   hover:bg-amber-500 active:bg-amber-600"
-          onClick={() => onRemoveFlag(flag.flag)} // ← 自分の flag 値を渡す
+          className="w-15 h-10 rounded-md bg-amber-400 hover:bg-amber-500 active:bg-amber-600 disabled:opacity-50"
+          onClick={() => onRemove(index)}
+          disabled={false}
         >
           削除
         </button>
       </div>
-
       {menu
-        .filter((element: Menu) => flag.HasFlag(element.Flag ?? 0))
-        .map((element, subIndex) => (
+        .filter((m) => flag.HasFlag(m.Flag ?? 0))
+        .map((m, i) => (
           <span
-            key={`${element.Flag ?? element.Item}-${subIndex}`}
-            className="w-full flex flex-row justify-between border-t-1 border-dashed px-2 font-regular"
+            key={`${m.Flag ?? m.Item}-${i}`}
+            className="w-full flex justify-between border-t border-dashed px-2"
           >
-            <span className="flex">{element.Item}</span>
-            <span className="flex">￥{element.Price}</span>
+            <span>{m.Item}</span>
+            <span>￥{m.Price}</span>
           </span>
         ))}
     </div>

@@ -1,51 +1,84 @@
 "use client";
-
-import { useEffect, useRef, useState } from "react";
 import menuConfig from "../../../informationLog/config/menuConfig.json";
+import { useEffect, useRef, useState } from "react";
 import { OrderManager } from "../../../component/utility/OrderManager";
 
-// Flagが「ビット値」か「インデックス」かを自動判定してビット化
-const toBit = (v: number) => {
-  const n = Number(v);
-  if (Number.isFinite(n) && n > 0 && (n & (n - 1)) === 0) return n; // 1,2,4,8,...
-  return 1 << n; // 0,1,2,... を 1<<n に
+// Flagを確実にビット値にする（未定義・インデックス・文字列にも耐性）
+const toBit = (raw: unknown, fallbackIndex: number) => {
+  const n = Number(raw);
+  if (Number.isFinite(n)) {
+    // すでに 1,2,4,8,... などのパワーオブツーならそのまま
+    if (n > 0 && (n & (n - 1)) === 0) return n;
+    // 0,1,2,... のインデックス想定
+    if (n >= 0) return 1 << n;
+  }
+  // Flagが未定義など → ボタンのindexからビット化
+  return 1 << fallbackIndex;
 };
 
-type ToppingMode = "or" | "set" | "xor";
+// OrderTableに支払方法をセットするためのメソッド検出
+const setPaymentTypeOn = (orderTable: any, value: number): boolean => {
+  const candidates = [
+    "SetPaymentType",
+    "setPaymentType",
+    "ChangePaymentType",
+    "SetPayType",
+    "SetPayment",
+  ];
+  for (const name of candidates) {
+    if (typeof orderTable?.[name] === "function") {
+      orderTable[name](value);
+      return true;
+    }
+  }
+  // プロパティ直書き（setterが用意されている場合のみ成功）
+  if ("paymentType" in orderTable) {
+    try {
+      orderTable.paymentType = value;
+      return true;
+    } catch {}
+  }
+  return false;
+};
+
+type OrderItem = { flag: number };
+type OrderTable = {
+  serial: number;
+  casherId: number;
+  paymentType?: number; // 実装により大文字/小文字揺れあり
+  PaymentType?: number;
+  receptionTime: number;
+  order: OrderItem[];
+};
 
 export default function ControllPanel() {
   const data = menuConfig.data as Array<{
     item: string;
     price: number;
-    Flag: number;
+    Flag?: number;
   }>;
-
-  // OrderManager は参照一定（useRef）で保持
   const managerRef = useRef(new OrderManager());
   const manager = managerRef.current;
 
   const [saving, setSaving] = useState(false);
   const [paymentType, setPaymentType] = useState<number>(1);
-  const [toppingMode, setToppingMode] = useState<ToppingMode>("or");
 
-  // ---- サーバとOrderManagerの同期 ----
+  // ---- サーバ <-> Manager 同期 ----
   const loadLatestIntoManager = async () => {
     const res = await fetch("/api/readOrder", { cache: "no-store" });
     if (!res.ok) throw new Error(`readOrder failed: ${res.status}`);
-    const json = await res.json();
+    const json = (await res.json()) as OrderTable[];
     manager.ReadOrder(json);
-    // 末尾の支払い方法をUIに反映（OrderManager側の命名に合わせる）
-    const last = manager.orderTable.at(-1);
+    const last: any = manager.orderTable.at(-1);
     if (last) {
-      // OrderTableのプロパティ名は Manager に合わせる（PaymentType/ paymentType どちらでもOKに）
-      const pt = (last as any).PaymentType ?? (last as any).paymentType ?? 1;
+      const pt = last.PaymentType ?? last.paymentType ?? paymentType;
       setPaymentType(pt);
     }
   };
 
   const writeManagerToServer = async () => {
     setSaving(true);
-    const body = manager.WriteOrder(); // Managerが正しい構造でJSON文字列を返す
+    const body = manager.WriteOrder(); // JSON文字列
     const res = await fetch("/api/writeOrder", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -56,138 +89,87 @@ export default function ControllPanel() {
       console.error("writeOrder NG:", await res.text());
       return false;
     }
-    // 表示側(CurrentOrder)にも更新通知
+    // 表示側へ更新通知 & 最終同期
     window.dispatchEvent(new CustomEvent("order:updated"));
-    // 念のため最新を再読込して Manager とサーバの乖離を防止
     await loadLatestIntoManager();
     return true;
   };
 
-  // 初期ロード
   useEffect(() => {
     loadLatestIntoManager().catch(console.error);
   }, []);
 
-  // ---- ユーティリティ（末尾の注文・末尾アイテムを保証） ----
+  // ---- 末尾の注文/アイテムを保証 ----
   const ensureLastOrderExists = () => {
     if (manager.orderTable.length === 0) {
-      // 引数シグネチャはプロジェクトの定義に依存
-      // だいたい (serial, casherId, paymentType) など
       const serial = Date.now();
+      // AddOrder(serial, casherId, paymentType) 想定
       manager.AddOrder(serial, 1, paymentType);
     }
     return manager.orderTable.at(-1)!;
   };
-
   const ensureLastItemExists = () => {
-    const lastOrder = ensureLastOrderExists();
+    const lastOrder = ensureLastOrderExists() as any;
     if (lastOrder.order.length === 0) {
-      lastOrder.Additem(); // flag=0 のアイテムが追加される前提
+      lastOrder.Additem(); // flag=0 で1行追加される想定
     }
     return lastOrder.order.at(-1)!; // Flagインスタンス
   };
 
-  // ---- 操作系 ----
-  // 焼うどん（flag:0）を1つ追加
+  // ---- 操作 ----
+  // 焼うどん追加（flag:0）
   const addYakiudon = async () => {
     await loadLatestIntoManager();
-    const lastOrder = ensureLastOrderExists();
-    lastOrder.Additem(); // 1行追加（flag=0）
+    const last = ensureLastOrderExists() as any;
+    last.Additem(); // 既存メソッド
     await writeManagerToServer();
   };
 
-  // トッピング：既存メソッドを使用（AddFlag/RemoveFlag/HasFlag）
-  const applyTopping = async (raw: number) => {
+  // トッピング（OR固定）：最後のアイテムに AddFlag(bit)
+  const applyTopping = async (rawFlag: unknown, idx: number) => {
     await loadLatestIntoManager();
-    const bit = toBit(raw);
-    const lastItem = ensureLastItemExists();
-
-    if (toppingMode === "or") {
-      lastItem.AddFlag(bit); // 既存：ORでビットを立てる
-    } else if (toppingMode === "set") {
-      // 一度クリアしてから AddFlag（Clearメソッドが無ければflag=0代入）
-      (lastItem as any).flag = 0;
-      lastItem.AddFlag(bit);
-    } else {
-      // xor: 付いていれば外す、無ければ付ける
-      if (lastItem.HasFlag(bit)) {
-        lastItem.RemoveFlag(bit);
-      } else {
-        lastItem.AddFlag(bit);
-      }
-    }
-
+    const bit = toBit(rawFlag, idx);
+    const lastItem: any = ensureLastItemExists();
+    lastItem.AddFlag(bit); // 既存メソッド（OR）
     await writeManagerToServer();
   };
 
-  // トッピング全クリア（flag=0）
+  // トッピング全消し（flag=0）
   const clearToppings = async () => {
     await loadLatestIntoManager();
-    const lastItem = ensureLastItemExists();
-    (lastItem as any).flag = 0;
+    const lastItem: any = ensureLastItemExists();
+    // クリア用メソッドが無ければ直接 flag=0 代入でOK
+    lastItem.flag = 0;
     await writeManagerToServer();
   };
 
-  // 支払方法切替（OrderTableのプロパティ名差異に対応）
+  // 支払方法切替（readonlyプロパティには直代入しない）
   const togglePayment = async () => {
     await loadLatestIntoManager();
-    const last = ensureLastOrderExists();
-    const cur = (last as any).PaymentType ?? (last as any).paymentType ?? 1;
+    const last: any = ensureLastOrderExists();
+    const cur = last.PaymentType ?? last.paymentType ?? 1;
     const nextType = cur === 1 ? 2 : 1;
-    if ("PaymentType" in last) (last as any).PaymentType = nextType;
-    if ("paymentType" in last) (last as any).paymentType = nextType;
+
+    const ok = setPaymentTypeOn(last, nextType);
+    if (!ok) {
+      console.error(
+        "OrderTable に支払方法のsetter/変更用メソッドが見つかりませんでした。"
+      );
+      return;
+    }
     setPaymentType(nextType);
     await writeManagerToServer();
   };
 
   return (
     <div className="flex flex-col justify-between">
-      <div className="grid grid-cols-5 grid-rows-5 gap-2 p-4">
-        {/* モード切替 & クリア */}
-        <div className="col-span-5 flex gap-2 items-center mb-1">
-          <button
-            className={`px-3 py-2 rounded ${
-              toppingMode === "or" ? "bg-emerald-400" : "bg-gray-300"
-            } hover:opacity-90`}
-            onClick={() => setToppingMode("or")}
-            disabled={saving}
-          >
-            OR追加
-          </button>
-          <button
-            className={`px-3 py-2 rounded ${
-              toppingMode === "set" ? "bg-emerald-400" : "bg-gray-300"
-            } hover:opacity-90`}
-            onClick={() => setToppingMode("set")}
-            disabled={saving}
-          >
-            SET上書き
-          </button>
-          <button
-            className={`px-3 py-2 rounded ${
-              toppingMode === "xor" ? "bg-emerald-400" : "bg-gray-300"
-            } hover:opacity-90`}
-            onClick={() => setToppingMode("xor")}
-            disabled={saving}
-          >
-            XORトグル
-          </button>
-          <div className="flex-1" />
-          <button
-            className="px-3 py-2 rounded bg-orange-300 hover:bg-orange-400 disabled:opacity-50"
-            onClick={clearToppings}
-            disabled={saving}
-          >
-            トッピングクリア
-          </button>
-        </div>
-
-        {/* トッピング（既存メソッドで最後のflagに反映） */}
+      <div className="grid grid-cols-5 grid-rows-4 gap-2 p-4">
+        {/* トッピング（押すたび OR） */}
         {data.map((item, index) => (
           <div key={index} className="w-full">
             <button
               className="p-4 rounded w-full h-full text-xl bg-blue-400 hover:bg-blue-500 active:bg-blue-600 text-black disabled:opacity-50"
-              onClick={() => applyTopping(item.Flag)}
+              onClick={() => applyTopping(item.Flag, index)}
               disabled={saving}
             >
               <div className="text-2xl">{item.item}</div>
@@ -215,6 +197,17 @@ export default function ControllPanel() {
             onClick={togglePayment}
           >
             {paymentType === 1 ? "金券" : "こいPay"}
+          </button>
+        </div>
+
+        {/* クリア */}
+        <div className="w-full">
+          <button
+            className="bg-slate-300 text-black text-2xl p-4 rounded w-full h-full hover:bg-slate-400 active:bg-slate-500 disabled:opacity-50"
+            disabled={saving}
+            onClick={clearToppings}
+          >
+            トッピングクリア
           </button>
         </div>
       </div>

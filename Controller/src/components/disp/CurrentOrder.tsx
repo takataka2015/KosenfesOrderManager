@@ -64,59 +64,67 @@ export default function CurrentOrder() {
     });
   };
 
-  // 注文確定（末尾に [] を追加して保存）
+  // 注文確定（直前の注文に現在のserial、末尾に「serial+1の素うどん1つ」を追加して保存）
   const handleConfirm = async () => {
     setSaving(true);
     try {
-      // ➊ ControllPanel 側で保持している最新値を localStorage から取得
+      // 1) ControllPanel 側の最新値を取得
       const s = Number(localStorage.getItem("kosen:serial"));
       const c = Number(localStorage.getItem("kosen:casherId"));
       const p = Number(localStorage.getItem("kosen:paymentType"));
       const serial = Number.isFinite(s)
         ? Math.min(24, Math.max(1, Math.floor(s)))
-        : undefined;
+        : 1;
       const casherId = Number.isFinite(c)
         ? Math.min(45, Math.max(1, Math.floor(c)))
-        : undefined;
-      const paymentType = p === 1 || p === 2 ? p : undefined;
+        : 1;
+      const paymentType = p === 1 || p === 2 ? p : 1;
 
-      // ➋ 現在の注文データを取得
+      // 2) 現在の配列を取得
       const res = await fetch("/api/readOrder", { cache: "no-store" });
       const current = res.ok ? await res.json() : [];
 
+      // 3) 直前の注文（オブジェクト側）へ現在の meta を反映
       if (Array.isArray(current) && current.length > 0) {
-        // 末尾が [] の場合は「ひとつ前」のオブジェクトが現在の注文
         const tail = current[current.length - 1];
         const lastObjIndex = Array.isArray(tail)
           ? current.length - 2
           : current.length - 1;
-
         if (
           lastObjIndex >= 0 &&
           current[lastObjIndex] &&
           !Array.isArray(current[lastObjIndex])
         ) {
           const last = current[lastObjIndex] as any;
-          if (serial !== undefined) last.serial = serial;
-          if (casherId !== undefined) last.casherId = casherId;
-          if (paymentType !== undefined) last.paymentType = paymentType; // getter回避で小文字側へ
+          last.serial = serial; // ← 直前の注文は「現在の整理券番号」
+          last.casherId = casherId;
+          last.paymentType = paymentType; // getter回避で小文字へ
         }
       }
 
-      // ➌ 末尾に空配列 [] を追加
-      const updated = Array.isArray(current) ? [...current, []] : [[], []];
+      // 4) 新規注文は「serial+1（24→1で循環）」を採番し、素うどん(flag:0)を1つ入れる
+      const serialNext = (serial % 24) + 1;
+      const newOrder = {
+        serial: serialNext, // ← ここが重複防止の肝
+        casherId,
+        paymentType,
+        receptionTime: Date.now(),
+        order: [{ flag: 0 }], // 素うどん1つ
+      };
+      const updated = Array.isArray(current)
+        ? [...current, newOrder]
+        : [newOrder];
 
-      // ➍ 書き込み
+      // 5) 書き込み → 再取得 → 通知
       await fetch("/api/writeOrder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updated),
       });
 
-      // ➎ 再取得して反映 + イベント通知（表示更新／整理券+1）
-      await fetchNow();
+      await fetchNow(); // 一度情報を更新
       window.dispatchEvent(new CustomEvent("order:updated"));
-      window.dispatchEvent(new CustomEvent("order:confirmed"));
+      window.dispatchEvent(new CustomEvent("order:confirmed")); // ControllPanel 側で表示の serial を+1
     } catch (err) {
       console.error(err);
     } finally {

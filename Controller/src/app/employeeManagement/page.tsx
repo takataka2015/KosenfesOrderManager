@@ -2,6 +2,7 @@ import Image from "next/image";
 import NowEmployeeList from "./employeeList";
 import Link from "next/link";
 import TimeCardForm from "./timeCardForm";
+import EmployeeList from "./employeeList";
 
     interface employeeListItem{
         id:number;

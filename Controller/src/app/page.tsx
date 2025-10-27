@@ -2,6 +2,7 @@
 import CurrentOrder from "../components/disp/CurrentOrder";
 import ControllPanel from "../components/disp/ControllPanel";
 import { useEffect, useState } from "react";
+import Command from "../components/Command";
 
 export default function Home() {
   const [order, setOrder] = useState<any[] | undefined>(undefined);
@@ -15,6 +16,7 @@ export default function Home() {
 
   return (
     <div className="font-sans flex flex-row min-h-screen">
+      <Command />
       <div className="bg-amber-300 flex flex-col justify-between min-h-screen w-1/4 min-w-60 fixed">
         <CurrentOrder />
       </div>

@@ -1,19 +1,17 @@
-import fs from 'fs';
 import { FilePath } from './format/filePath';
-import { OrderTable } from './OrderTable';
+import { OrderTable, TOrderTable, Flag, TFlag } from './OrderTable';
 import MenuJson from "../../informationLog/config/menuConfig.json";
 import { Menu } from "./format/menu";
 import EmployeeJson from "../../informationLog/config/employeeList.json";
 import { Employee } from "./format/employee";
+import 'reflect-metadata';
+import { plainToInstance } from 'class-transformer';
 
 /**
  * 注文を管理するためのクラス
  */
 export class OrderManager {
-    /**
-     * ファイルパス
-     */
-    private path: FilePath = new FilePath();
+
     /**
      * 現在ある注文
      */
@@ -47,42 +45,58 @@ export class OrderManager {
     /**
      * 現在の注文を読み込む
      */
-    ReadOrder() {
-        this.orderTable = JSON.parse(fs.readFileSync(this.path.order.Now, 'utf-8'));
-    }
-
-    /**
-     * 現在の注文内容を書き込む
-     */
-    WriteOrder() {
-        fs.writeFileSync(this.path.order.Now, JSON.stringify(this.orderTable, undefined, ' '), 'utf-8');
-    }
-
-    /**
-     * 受付番号を指定してその注文を削除する
-     * @param serial 受付番号
-     * @returns 実行結果
-     * @description 0:正常終了,1:その受付番号が見つからない
-     */
-    ClearOrder(serial: number): number {
-        let index: number = this.orderTable.findIndex(element => element.serial == serial);
-        if (index != -1) {
-            let removeOrder: OrderTable = this.orderTable.splice(index, 1)[0];
-            fs.writeFileSync(this.path.order.Now, JSON.stringify(this.orderTable, undefined, ' '), 'utf-8');
-            fs.appendFileSync(this.path.order.History, JSON.stringify(removeOrder, undefined, ' ') + ",", 'utf-8');
-            return 0;
+    ReadOrder(json: any) {
+        if (json)
+        {
+            let _orderTable = json as TOrderTable[];
+            this.orderTable = _orderTable.map((_order: TOrderTable) => new OrderTable(_order.serial, _order.casherId, _order.paymentType));
+            
+            for (let i = 0; i < this.orderTable.length; i++) {
+                this.orderTable[i].order = _orderTable[i].order.map((_o: TFlag) => new Flag(_o.flag));
+            }
         }
-        else {
-            return 1;
-        }
+        
     }
 
     /**
-     * unity側で指定された受付番号を確認し自動的に削除する
+     * 現在の注文内容を書き込む \
+     * fetch() にラップして使って下さい！！！
+     * @example
+     * fetch("/api/writeOrder/", { method: "POST", headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ n: parseInt(n) }
+             })
      */
-    ClearRequestCheck() {
-        let requestJson: { serials: number[] } = JSON.parse(fs.readFileSync(this.path.order.Request, 'utf-8'));
-        requestJson.serials = requestJson.serials.filter(element => this.ClearOrder(element) == 1);
-        fs.writeFileSync(this.path.order.Request, JSON.stringify(requestJson, undefined, ' '), 'utf-8')
+    WriteOrder() : string {
+        return JSON.stringify(this.orderTable, undefined, ' ');
     }
+
+    // /**
+    //  * 受付番号を指定してその注文を削除する
+    //  * @param serial 受付番号
+    //  * @returns 実行結果
+    //  * @description 0:正常終了,1:その受付番号が見つからない
+    //  */
+    // ClearOrder(serial: number): number {
+    //     let index: number = this.orderTable.findIndex(element => element.serial == serial);
+    //     if (index != -1) {
+    //         let removeOrder: OrderTable = this.orderTable.splice(index, 1)[0];
+    //         fs.writeFileSync(FilePath.Now, JSON.stringify(this.orderTable, undefined, ' '), 'utf-8');
+    //         fs.appendFileSync(FilePath.History, JSON.stringify(removeOrder, undefined, ' ') + ",", 'utf-8');
+    //         return 0;
+    //     }
+    //     else {
+    //         return 1;
+    //     }
+    // }
+
+    // /**
+    //  * unity側で指定された受付番号を確認し自動的に削除する
+    //  */
+    // ClearRequestCheck() {
+    //     let requestJson: { serials: number[] } = JSON.parse(fs.readFileSync(FilePath.Request, 'utf-8'));
+    //     requestJson.serials = requestJson.serials.filter(element => this.ClearOrder(element) == 1);
+    //     fs.writeFileSync(FilePath.Request, JSON.stringify(requestJson, undefined, ' '), 'utf-8')
+    // }
 }

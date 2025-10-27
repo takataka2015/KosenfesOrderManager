@@ -10,6 +10,7 @@ export class OrderTable {
     casherId: number;
     receptionTime: number;
     paymentType: number;
+    price: number;
 
     /**
      * 受付番号
@@ -35,12 +36,7 @@ export class OrderTable {
     get PaymentType(): number {
         return this.paymentType;
     }
-    /**
-     * 注文の合計金額
-     */
-    get Price(): number {
-        return this.MoneyCalc();
-    }
+
 
     constructor(serial: number, casherId: number, paymentType: number) {
         this.serial = serial;
@@ -48,23 +44,29 @@ export class OrderTable {
         this.paymentType = paymentType;
         this.receptionTime = Date.now();
         this.order = [];
+        this.price = 0;
     }
 
-    /**
-     * 注文の金額を計算する
-     * @returns 合計金額
-     */
-    private MoneyCalc(): number {
-        return 0;
-    };
-
     Additem() {
-        this.order.push(new Flag());
+        this.order.push(new Flag(0));
     }
 }
 
-class Flag {
+export type TOrderTable = {
+    // JSON から読み込むと Flag[] 型であることが保証されないため、自力でパースすること
+    order: TFlag[];
+    serial: number;
+    casherId: number;
+    receptionTime: number;
+    paymentType: number;
+}
+
+export class Flag {
     flag: number = 0;
+
+    constructor(flag: number) {
+        this.flag = flag;
+    }
 
     HasFlag(flag: number): boolean {
         return flag == (this.flag & flag);
@@ -77,4 +79,8 @@ class Flag {
     RemoveFlag(flag: number) {
         this.flag &= ~flag;
     }
+}
+
+export type TFlag = {
+    flag: number;
 }

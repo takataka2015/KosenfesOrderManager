@@ -72,31 +72,27 @@ export class OrderManager {
         return JSON.stringify(this.orderTable, undefined, ' ');
     }
 
-    // /**
-    //  * 受付番号を指定してその注文を削除する
-    //  * @param serial 受付番号
-    //  * @returns 実行結果
-    //  * @description 0:正常終了,1:その受付番号が見つからない
-    //  */
-    // ClearOrder(serial: number): number {
-    //     let index: number = this.orderTable.findIndex(element => element.serial == serial);
-    //     if (index != -1) {
-    //         let removeOrder: OrderTable = this.orderTable.splice(index, 1)[0];
-    //         fs.writeFileSync(FilePath.Now, JSON.stringify(this.orderTable, undefined, ' '), 'utf-8');
-    //         fs.appendFileSync(FilePath.History, JSON.stringify(removeOrder, undefined, ' ') + ",", 'utf-8');
-    //         return 0;
-    //     }
-    //     else {
-    //         return 1;
-    //     }
-    // }
+/**
+ * 受付番号を指定してその注文を削除（API経由）
+ * @returns 0=削除成功, 1=見つからず
+ */
+async ClearOrder(serial: number): Promise<0 | 1> {
+  const res = await fetch("/api/order/delete-by-serial", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ serial }),
+    cache: "no-store",
+  });
+  if (!res.ok) return 1;
+  const j = await res.json();
+  return j.ok && j.found ? 0 : 1;
+}
 
-    // /**
-    //  * unity側で指定された受付番号を確認し自動的に削除する
-    //  */
-    // ClearRequestCheck() {
-    //     let requestJson: { serials: number[] } = JSON.parse(fs.readFileSync(FilePath.Request, 'utf-8'));
-    //     requestJson.serials = requestJson.serials.filter(element => this.ClearOrder(element) == 1);
-    //     fs.writeFileSync(FilePath.Request, JSON.stringify(requestJson, undefined, ' '), 'utf-8')
-    // }
+/**
+ * Unity側で指定された受付番号を確認し自動的に削除（1回実行、API経由）
+ */
+async ClearRequestCheck(): Promise<void> {
+  await fetch("/api/order/clear-requests", { method: "POST", cache: "no-store" });
+}
+
 }

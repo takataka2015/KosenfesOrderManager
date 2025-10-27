@@ -8,9 +8,10 @@ import EmployeeJson from "../../informationLog/config/employeeList.json";
  */
 export class TimeCard {
     /**
-     * ファイルパス
+     * ファイルパスのインスタンスは不要なため削除
      */
-    private path: FilePath = new FilePath();
+    // private path: FilePath = new FilePath(); // ← 削除
+
     /**
      * jsonから読み込んだ従業員の情報
      */
@@ -22,11 +23,35 @@ export class TimeCard {
 
     constructor() {
         this.employee = [];
-        this.attend = [];
+        
+        // 1. 最初に
         EmployeeJson.data.forEach(element => {
             this.employee.push(new Employee(element.id, element.name));
-            this.attend.push(new AttendSheet(element.id));
         });
+
+        // 2. ▼▼▼ 修正点: try...catch ブロックをループの外に移動 ▼▼▼
+        // 勤怠データの初期化はコンストラクタで一度だけ実行する
+        try {
+            // 3. ▼▼▼ 修正点: this.path.Attendance -> FilePath.Attendance ▼▼▼
+            // FilePathクラスから直接Attendanceプロパティにアクセス
+            const fileData = fs.readFileSync(FilePath.Attendance, 'utf-8');
+            const savedAttendData = JSON.parse(fileData);
+
+            this.attend = savedAttendData.map((data: AttendSheet) => {
+                const sheet = new AttendSheet(data.id);
+                Object.assign(sheet, data);
+                return sheet;
+            });
+
+        } catch (error) {
+            // ファイルが存在しない、または読み込めない場合
+            console.log("Attendance file not found or invalid. Initializing new attendance sheet.");
+            this.attend = [];
+            // EmployeeJsonから初期データを作成
+            EmployeeJson.data.forEach(element => {
+                this.attend.push(new AttendSheet(element.id));
+            });
+        }
     }
 
     /**
@@ -40,7 +65,7 @@ export class TimeCard {
         if (index != -1 && !this.attend[index].isExist) {
             this.attend[index].isExist = true;
             this.attend[index].clockLog.push(Date.now());
-            fs.writeFileSync(this.path.Attendance, JSON.stringify(this.attend, undefined, ' '), 'utf-8');
+            fs.writeFileSync(FilePath.Attendance, JSON.stringify(this.attend, undefined, ' '), 'utf-8');
             return 0;
         }
         else if (index == -1) {
@@ -62,7 +87,7 @@ export class TimeCard {
         if (index != -1 && this.attend[index].isExist) {
             this.attend[index].isExist = false;
             this.attend[index].clockLog.push(Date.now());
-            fs.writeFileSync(this.path.Attendance, JSON.stringify(this.attend, undefined, ' '), 'utf-8');
+            fs.writeFileSync(FilePath.Attendance, JSON.stringify(this.attend, undefined, ' '), 'utf-8');
             return 0;
         }
         else if (index == -1) {
@@ -81,7 +106,7 @@ class AttendSheet {
     /**
      * 従業員の固有番号
      */
-    private id: number;
+    public id: number;
     /**
      * 出勤しているかどうか
      */

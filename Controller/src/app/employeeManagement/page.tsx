@@ -1,9 +1,7 @@
 import Image from "next/image";
 import NowEmployeeList from "./employeeList";
 import Link from "next/link";
-import { revalidatePath } from "next/cache";
-import EmployeeJson from "../../../informationLog/config/employeeList.json"
-import { TimeCard } from "../../../component/utility/TimeCard";
+import TimeCardForm from "./timeCardForm";
 
     interface employeeListItem{
         id:number;
@@ -16,16 +14,6 @@ import { TimeCard } from "../../../component/utility/TimeCard";
 
 export default async function EmployeeManagement()
 {
-    const timeCard = new TimeCard();
-
-    async function submit(formData:FormData){
-        'use server'
-        const idString =formData.get('employeeId') as string;
-        const action =formData.get('action') as string;
-
-        console.log(idString);
-        }
-        
     return(
     <>
     <div className="ml-2">
@@ -37,46 +25,7 @@ export default async function EmployeeManagement()
                 出退勤を行う際は必ず操作を行ってください
         </div>
         <div className="mt-1">
-        <form action={submit}>
-            <div className="mt-1">
-                <input 
-                name="employeeId" // (Server Action側と名前を統一: "number" -> "employeeId")
-                className="border border-gray-700"
-                type="number"
-                placeholder="出席番号を入力"
-                required // 入力必須
-            />
-            
-            <button 
-                type="submit" name="action" value="check"
-                className="bg-gray-600 text-white font-bold py-2 px4 rounded ml-10
-                hover:bg-gray-700 active:bg-gray-800
-                hover:scale-105 active:scale-95
-                hover:shadow-md active:shadow-inner">出席番号確認</button>
-            
-            </div>
-
-          {/* ▼ 6. 出退勤ボタンを同じフォーム内に配置 */}
-            <div className="mt-5">
-                <button
-                type="submit"
-                name="action"     // どのボタンが押されたか
-                value="clock-in" // 押された時の値
-                className="bg-lime-600 text-white font-bold py-2 px-4 rounded mr-10
-                hover:bg-lime-700 active:bg-lime-800
-                hover:scale-105 active:scale-95
-                hover:shadow-md active:shadow-inner">出勤</button>
-    
-                <button
-                type="submit"
-                name="action"      // どのボタンが押されたか
-                value="clock-out" // 押された時の値
-                className="bg-amber-600 text-white font-bold py-2 px-4 rounded
-                hover:bg-amber-700 active:bg-amber-800
-                hover:scale-105 active:scale-95
-                hover:shadow-md active:shadow-inner">退勤</button>
-            </div>
-        </form>
+        <TimeCardForm />
         </div>
         <div 
             className="font-bold text-3xl mt-10">

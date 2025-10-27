@@ -25,7 +25,30 @@ export class TimeCard {
         this.attend = [];
         EmployeeJson.data.forEach(element => {
             this.employee.push(new Employee(element.id, element.name));
-            this.attend.push(new AttendSheet(element.id));
+            //一部修正
+            //this.attend.push(new AttendSheet(element.id));
+    try {
+            // まず勤怠ファイル（Attendance）の読み込みを試みる
+            const fileData = fs.readFileSync(this.path.Attendance, 'utf-8');
+            const savedAttendData = JSON.parse(fileData);
+
+            // 読み込んだデータから AttendSheet のインスタンスを復元する
+            // Object.assignでプロパティをコピーすることで、メソッド(workingTime)も使える状態にする
+            this.attend = savedAttendData.map((data: AttendSheet) => {
+                const sheet = new AttendSheet(data.id); // publicになったidを使う
+                Object.assign(sheet, data);
+                return sheet;
+            });
+
+        } catch (error) {
+            // ファイルが存在しない、または読み込めない場合 (初回起動時など)
+            console.log("Attendance file not found or invalid. Initializing new attendance sheet.");
+            this.attend = [];
+            // 従来通り、EmployeeJsonから初期データを作成する
+            EmployeeJson.data.forEach(element => {
+                this.attend.push(new AttendSheet(element.id));
+            });
+        }
         });
     }
 
@@ -81,7 +104,7 @@ class AttendSheet {
     /**
      * 従業員の固有番号
      */
-    private id: number;
+    public id: number;
     /**
      * 出勤しているかどうか
      */

@@ -143,9 +143,11 @@ export default function ControllPanel() {
     loadLatestIntoManager().catch(console.error);
   }, []);
 
-  // ★ 注文確定後（CurrentOrder 側が発火）に整理券番号を +1（24→1）
+  // 整理券番号最大値
+  const maxNum: any = 40;
+  // ★ 注文確定後（CurrentOrder 側が発火）に整理券番号を +1（maxNum→1）
   useEffect(() => {
-    const onConfirmed = () => setSerial((s) => (s % 24) + 1);
+    const onConfirmed = () => setSerial((s) => (s % maxNum) + 1);
     window.addEventListener("order:confirmed", onConfirmed);
     return () => window.removeEventListener("order:confirmed", onConfirmed);
   }, []);
@@ -195,7 +197,7 @@ export default function ControllPanel() {
   };
 
   // 支払方法「明示セット」：末尾が [] のときは“新しい注文”を作ってから設定
-  const setPayment = async (type: 1 | 2) => {
+  const setPayment = async (type: 1 | 2 | 3 | 4) => {
     await loadLatestIntoManager();
 
     // ← 重要：末尾が [] だった場合に必ず新規注文を作る
@@ -211,7 +213,7 @@ export default function ControllPanel() {
     } else if (lastIdx < 0 || Array.isArray(arr[lastIdx])) {
       // 念のため：履歴しかない or 末尾が配列なら、新規注文を1件足して設定
       arr.push({
-        serial: Math.min(24, Math.max(1, Math.floor(serial))),
+        serial: Math.min(maxNum, Math.max(1, Math.floor(serial))),
         casherId: Math.min(45, Math.max(1, Math.floor(casherId))),
         paymentType: type,
         receptionTime: Date.now(),
@@ -228,7 +230,7 @@ export default function ControllPanel() {
   // ---- 入力ハンドラ（見た目はそのまま・機能だけ追加） ----
   const onChangeSerial = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = Number(e.target.value);
-    if (Number.isFinite(v)) setSerial(clampInt(v, 1, 24));
+    if (Number.isFinite(v)) setSerial(clampInt(v, 1, maxNum));
   };
   const onChangeCasherId = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = Number(e.target.value);
@@ -290,8 +292,7 @@ export default function ControllPanel() {
               type="number"
               placeholder="3"
               min={1}
-              max={24}
-              maxLength={2}
+              max={maxNum}
               value={serial}
               onChange={onChangeSerial}
             />
@@ -313,7 +314,7 @@ export default function ControllPanel() {
           </div>
         </div>
 
-        {/* 支払方法（2ボタン） */}
+        {/* 支払方法（4ボタン） */}
         <div className="w-full col-span-3">
           <div className="flex gap-2">
             <button
@@ -322,7 +323,6 @@ export default function ControllPanel() {
               } hover:opacity-50 disabled:opacity-100`}
               disabled={saving}
               onClick={() => setPayment(1)}
-              title="金券に設定"
             >
               金券
             </button>
@@ -332,9 +332,26 @@ export default function ControllPanel() {
               } hover:opacity-50 disabled:opacity-100`}
               disabled={saving}
               onClick={() => setPayment(2)}
-              title="こいPayに設定"
             >
-              こいPay
+              PayPay
+            </button>
+            <button
+              className={`flex-1 text-2xl p-4 rounded ${
+                paymentType === 3 ? "bg-yellow-500" : "bg-yellow-200"
+              } hover:opacity-50 disabled:opacity-100`}
+              disabled={saving}
+              onClick={() => setPayment(3)}
+            >
+              クレジット
+            </button>
+            <button
+              className={`flex-1 text-2xl p-4 rounded ${
+                paymentType === 4 ? "bg-yellow-500" : "bg-yellow-200"
+              } hover:opacity-50 disabled:opacity-100`}
+              disabled={saving}
+              onClick={() => setPayment(4)}
+            >
+              交通系IC
             </button>
           </div>
         </div>

@@ -164,6 +164,12 @@ export default function CurrentOrder() {
       await fetchNow(); // 一度情報を更新
       window.dispatchEvent(new CustomEvent("order:updated"));
       window.dispatchEvent(new CustomEvent("order:confirmed"));
+
+      await fetch("/api/order/auto-sweep", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "start", intervalMs: 1000 }),
+      });
     } catch (err) {
       console.error(err);
     } finally {

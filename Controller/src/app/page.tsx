@@ -14,6 +14,15 @@ export default function Home() {
       .catch(() => setOrder(undefined));
   }, []);
 
+  // Unityからの削除を一定間隔で確認
+  useEffect(() => {
+    fetch("/api/order/auto-sweep", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "start", intervalMs: 1000 }),
+    }).catch(console.error);
+  }, []);
+
   return (
     <div className="font-sans flex flex-row min-h-screen">
       <Command />

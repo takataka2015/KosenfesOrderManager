@@ -11,4 +11,23 @@
    "flag": 4
   }
  ]
+},{
+ "serial": 3,
+ "casherId": 2,
+ "paymentType": 2,
+ "receptionTime": 1761187609866,
+ "order": [
+  {
+   "flag": 3
+  },
+  {
+   "flag": 7
+  },
+  {
+   "flag": 5
+  },
+  {
+   "flag": 31
+  }
+ ]
 },

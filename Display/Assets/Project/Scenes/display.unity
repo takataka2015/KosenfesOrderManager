@@ -846,7 +846,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  callingTableObject: {fileID: 0}
+  callingTableObject: {fileID: 2056348648}
 --- !u!114 &366543483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2192,7 +2192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  callingTableObject: {fileID: 0}
+  callingTableObject: {fileID: 2056348648}
 --- !u!114 &700334878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2360,7 +2360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  callingTableObject: {fileID: 0}
+  callingTableObject: {fileID: 2056348648}
 --- !u!114 &813190775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2585,7 +2585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  callingTableObject: {fileID: 0}
+  callingTableObject: {fileID: 2056348648}
 --- !u!114 &921823744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3140,6 +3140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436d569e92d803842b60ad2cf0d7ec34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  requireTableObject: {fileID: 1003975785}
 --- !u!1 &1003975785
 GameObject:
   m_ObjectHideFlags: 0
@@ -3149,6 +3150,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1003975786}
+  - component: {fileID: 1003975787}
   m_Layer: 5
   m_Name: RequireTable
   m_TagString: Untagged
@@ -3176,6 +3178,18 @@ RectTransform:
   m_AnchoredPosition: {x: 834.3625, y: 180}
   m_SizeDelta: {x: -1668.725, y: -360}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1003975787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1003975785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d435a8e1045e6854784eaec001966abb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1126546916
 GameObject:
   m_ObjectHideFlags: 0
@@ -3362,7 +3376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  callingTableObject: {fileID: 0}
+  callingTableObject: {fileID: 2056348648}
 --- !u!114 &1135778071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3432,7 +3446,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  callingTableObject: {fileID: 0}
+  callingTableObject: {fileID: 2056348648}
 --- !u!114 &1182047213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4042,7 +4056,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  callingTableObject: {fileID: 0}
+  callingTableObject: {fileID: 2056348648}
 --- !u!114 &1321900267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4752,7 +4766,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  callingTableObject: {fileID: 0}
+  callingTableObject: {fileID: 2056348648}
 --- !u!114 &1580572503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5394,7 +5408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  callingTableObject: {fileID: 0}
+  callingTableObject: {fileID: 2056348648}
 --- !u!114 &1785946433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6146,7 +6160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  callingTableObject: {fileID: 0}
+  callingTableObject: {fileID: 2056348648}
 --- !u!114 &2091076468
 MonoBehaviour:
   m_ObjectHideFlags: 0

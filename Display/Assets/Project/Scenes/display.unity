@@ -251,7 +251,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u713C\u3046\u3069\u3093\n--seafood\n--meat\n-------------------\nyakiudon\n--seafood\n--meat\n-------------------\nyakiudon\n--seafood\n--meat\n-------------------\n"
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
   m_sharedMaterial: {fileID: 2657451443901234642, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
@@ -440,9 +440,9 @@ RectTransform:
   - {fileID: 700334876}
   m_Father: {fileID: 996422356}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 333.745, y: 270}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 1167.745, y: 270}
   m_SizeDelta: {x: 333.745, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &93003516
@@ -490,9 +490,9 @@ RectTransform:
   - {fileID: 1321900265}
   m_Father: {fileID: 996422356}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -333.745, y: -270}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 500.255, y: -270}
   m_SizeDelta: {x: 333.745, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &96263111
@@ -717,31 +717,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-'
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
   m_sharedMaterial: {fileID: 2657451443901234642, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
@@ -870,6 +846,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  callingTableObject: {fileID: 0}
 --- !u!114 &366543483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -965,31 +942,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-'
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
   m_sharedMaterial: {fileID: 2657451443901234642, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
@@ -1451,9 +1404,9 @@ RectTransform:
   - {fileID: 2091076466}
   m_Father: {fileID: 996422356}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 270}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 834, y: 270}
   m_SizeDelta: {x: 333.745, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &523566282
@@ -1501,9 +1454,9 @@ RectTransform:
   - {fileID: 813190773}
   m_Father: {fileID: 996422356}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -667.49, y: -270}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 166.51001, y: -270}
   m_SizeDelta: {x: 333.745, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &583056362
@@ -1575,31 +1528,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-'
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
   m_sharedMaterial: {fileID: 2657451443901234642, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
@@ -2060,9 +1989,9 @@ RectTransform:
   - {fileID: 1135778069}
   m_Father: {fileID: 996422356}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -270}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 834, y: -270}
   m_SizeDelta: {x: 333.745, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &657702860
@@ -2134,31 +2063,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-'
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
   m_sharedMaterial: {fileID: 2657451443901234642, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
@@ -2287,6 +2192,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  callingTableObject: {fileID: 0}
 --- !u!114 &700334878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2454,6 +2360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  callingTableObject: {fileID: 0}
 --- !u!114 &813190775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2678,6 +2585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  callingTableObject: {fileID: 0}
 --- !u!114 &921823744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2773,7 +2681,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
   m_sharedMaterial: {fileID: 2657451443901234642, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
@@ -2800,7 +2708,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 129.4
   m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -3157,9 +3065,9 @@ RectTransform:
   - {fileID: 366543481}
   m_Father: {fileID: 996422356}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 333.745, y: -270}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 1167.745, y: -270}
   m_SizeDelta: {x: 333.745, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &990539859
@@ -3229,7 +3137,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 996422355}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42b448606a5345a41a00764372a85d86, type: 3}
+  m_Script: {fileID: 11500000, guid: 436d569e92d803842b60ad2cf0d7ec34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1003975785
@@ -3325,31 +3233,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-'
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
   m_sharedMaterial: {fileID: 2657451443901234642, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
@@ -3478,6 +3362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  callingTableObject: {fileID: 0}
 --- !u!114 &1135778071
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3547,6 +3432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  callingTableObject: {fileID: 0}
 --- !u!114 &1182047213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3637,9 +3523,9 @@ RectTransform:
   - {fileID: 921823742}
   m_Father: {fileID: 996422356}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 667.49, y: 270}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 1501.49, y: 270}
   m_SizeDelta: {x: 333.745, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1201282195
@@ -3847,31 +3733,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-'
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
   m_sharedMaterial: {fileID: 2657451443901234642, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
@@ -4180,6 +4042,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  callingTableObject: {fileID: 0}
 --- !u!114 &1321900267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4760,31 +4623,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-'
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
   m_sharedMaterial: {fileID: 2657451443901234642, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
@@ -4913,6 +4752,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  callingTableObject: {fileID: 0}
 --- !u!114 &1580572503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5487,10 +5327,10 @@ RectTransform:
   - {fileID: 1182047215}
   m_Father: {fileID: 996422356}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -667.4897, y: 270}
-  m_SizeDelta: {x: -1336.2545, y: -540}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 166.51, y: 270}
+  m_SizeDelta: {x: 333.745, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1759970931
 MonoBehaviour:
@@ -5554,6 +5394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  callingTableObject: {fileID: 0}
 --- !u!114 &1785946433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5702,9 +5543,9 @@ RectTransform:
   - {fileID: 1785946431}
   m_Father: {fileID: 996422356}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -333.745, y: 270}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 500.255, y: 270}
   m_SizeDelta: {x: 333.745, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1935042213
@@ -5776,31 +5617,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-'
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
   m_sharedMaterial: {fileID: 2657451443901234642, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
@@ -6101,6 +5918,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2056348649}
+  - component: {fileID: 2056348650}
   m_Layer: 5
   m_Name: CallingTable
   m_TagString: Untagged
@@ -6130,6 +5948,18 @@ RectTransform:
   m_AnchoredPosition: {x: 834.3625, y: -360}
   m_SizeDelta: {x: -1668.725, y: -720}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2056348650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2056348648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 522666fbfd9986840abb5942dfcef6da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2066775562
 GameObject:
   m_ObjectHideFlags: 0
@@ -6187,31 +6017,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-    yakiudon
-
-    --seafood
-
-    --meat
-
-    -------------------
-
-'
+  m_text: Text
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
   m_sharedMaterial: {fileID: 2657451443901234642, guid: 9c1e6cd352a22ff45918bb7b32dd8111, type: 2}
@@ -6340,6 +6146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da63c793b244ba94e82aaa99b9545428, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  callingTableObject: {fileID: 0}
 --- !u!114 &2091076468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6411,9 +6218,9 @@ RectTransform:
   - {fileID: 1580572501}
   m_Father: {fileID: 996422356}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 667.49, y: -270}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 1501.49, y: -270}
   m_SizeDelta: {x: 333.745, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2091877004

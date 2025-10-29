@@ -8,7 +8,7 @@ public class Menu
     public Menu(MenuJsonMenu menu, int index)
     {
         Item = menu.item;
-        Flag = 2 ^ index;
+        Flag = (int)MathF.Pow(2,index);
     }
 }
 

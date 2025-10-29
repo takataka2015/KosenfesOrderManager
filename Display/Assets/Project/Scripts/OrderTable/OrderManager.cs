@@ -1,30 +1,31 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class OrderManager : MonoBehaviour
 {
+    [SerializeField]
+    GameObject requireTableObject;
     FilePath path = new();
+    RequireTable requireTable;
     OrderTableObject[] orderObjects;
     Menu[] menus;
 
     int count = 0;
-    const int interval = 50;
+    const int interval = 25;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        requireTable = requireTableObject.GetComponent<RequireTable>();
         orderObjects = transform.GetComponentsInChildren<OrderTableObject>();
         ReadMenuJson();
-        ReadOrderJson();
     }
 
     void Start()
     {
-
+        ReadOrderJson();
     }
 
     void FixedUpdate()
@@ -42,7 +43,13 @@ public class OrderManager : MonoBehaviour
 
     void ReadOrderJson()
     {
-        
+        OrderJsonOrder[] orderJsons = JsonUtility.FromJson<OrderJson>(@"{""data"":" + File.ReadAllText(path.Now, System.Text.Encoding.UTF8) + "}").data;
+
+        orderObjects.Zip(orderJsons, (orderObject, orderJson) => (Action)(() => orderObject.SetActive(orderJson, menus)))
+        .Concat(orderObjects.Skip(orderJsons.Length).Select(orderObject => (Action)(() => orderObject.SetInActive())))
+        .ToList().ForEach(function => function());
+
+        requireTable.SetRequireTable(orderJsons,menus);
     }
 
     void ReadMenuJson()

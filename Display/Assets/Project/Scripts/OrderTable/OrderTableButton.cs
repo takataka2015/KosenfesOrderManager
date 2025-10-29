@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -5,16 +8,45 @@ using UnityEngine.UI;
 
 public class OrderTableButton : MonoBehaviour,CustomButton
 {
+    [SerializeField] GameObject callingTableObject;
     public System.Action onClickCallback;
+    FilePath path;
+    CallingTable callingTable;
+    Vector3 baseScale;
+    int serial;
+    
     GameObject buttonObject;
     Image buttonImage;
     bool isHover;
 
-    protected void Awake()
+    public void Awake()
     {
+        path = new();
         buttonObject = transform.parent.GetChild(0).gameObject;
         buttonImage = buttonObject.GetComponent<Image>();
+        callingTable = callingTableObject.GetComponent<CallingTable>();
+        baseScale = transform.localScale;
         isHover = false;
+    }
+
+    public void SetActive(int number)
+    {
+        serial = number;
+        transform.localScale = baseScale;
+    }
+
+    public void SetInActive()
+    {
+        transform.localScale = Vector3.zero;
+    }
+    
+    public void ClearRequest(int serial)
+    {
+        HashSet<int> request;
+        request = JsonUtility.FromJson<SerialJson>(File.ReadAllText(path.Request, System.Text.Encoding.UTF8)).serials.ToHashSet();
+        request.Add(serial);
+        File.WriteAllText(path.Request, JsonUtility.ToJson(new SerialJson(request.ToArray())));
+        callingTable.SetCallingNumber(serial);
     }
 
     void Hover()
@@ -47,7 +79,7 @@ public class OrderTableButton : MonoBehaviour,CustomButton
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        onClickCallback?.Invoke();
+        ClearRequest(serial);
     }
 
     public void OnPointerDown(PointerEventData eventData)

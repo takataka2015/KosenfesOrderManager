@@ -1,13 +1,9 @@
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class OrderTableObject : MonoBehaviour
 {
-    FilePath path;
     ButtonText text;
     OrderTableButton button;
 
@@ -26,29 +22,19 @@ public class OrderTableObject : MonoBehaviour
 
     public void SetActive(OrderJsonOrder orderJson, Menu[] menus)
     {
-        Debug.Log(true);
+        button.SetActive(orderJson.serial);
         text.header.text = string.Format("No.{0:0000}", orderJson.serial);
         text.body.text = string.Join("\n-------------------\n",
-                        orderJson.order.Select(order => string.Join("\n", menus
+                        orderJson.order.Select(order => "焼うどん\n" + string.Join("\n", menus
                                        .Where(menu => order.HasFlag(menu.Flag))
                                        .Select(menu => $"  --{menu.Item}"))));
     }
 
     public void SetInActive()
     {
+        button.SetInActive();
         text.header.text = "";
         text.body.text = "";
-    }
-
-    public void ClearRequest(int serial)
-    {
-        List<int> request = new();
-        foreach (int serialJson in JsonUtility.FromJson<SerialJson>(File.ReadAllText(path.Request, System.Text.Encoding.UTF8)).serials)
-        {
-            request.Add(serialJson);
-        }
-        request.Add(serial);
-        File.WriteAllText(path.Request, JsonUtility.ToJson(new SerialJson(request.ToArray())));
     }
 }
 

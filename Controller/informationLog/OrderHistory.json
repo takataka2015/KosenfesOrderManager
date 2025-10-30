@@ -184,3 +184,125 @@
  "paymentType": 1,
  "price": 0
 },
+{
+ "order": [
+  {
+   "flag": 35
+  }
+ ],
+ "serial": 6,
+ "casherId": 1,
+ "receptionTime": 1761781305625,
+ "paymentType": 1,
+ "price": 0
+},
+{
+ "order": [
+  {
+   "flag": 33
+  },
+  {
+   "flag": 63
+  }
+ ],
+ "serial": 4,
+ "casherId": 1,
+ "receptionTime": 1761781305625,
+ "paymentType": 1,
+ "price": 0
+},
+{
+ "order": [
+  {
+   "flag": 7
+  },
+  {
+   "flag": 34
+  }
+ ],
+ "serial": 7,
+ "casherId": 1,
+ "receptionTime": 1761781305625,
+ "paymentType": 1,
+ "price": 0
+},
+{
+ "order": [
+  {
+   "flag": 28
+  },
+  {
+   "flag": 10
+  }
+ ],
+ "serial": 5,
+ "casherId": 1,
+ "receptionTime": 1761781305625,
+ "paymentType": 1,
+ "price": 0
+},
+{
+ "serial": 8,
+ "casherId": 1,
+ "paymentType": 1,
+ "receptionTime": 1761781342362,
+ "order": [
+  {
+   "flag": 0
+  }
+ ]
+},
+{
+ "order": [
+  {
+   "flag": 33
+  }
+ ],
+ "serial": 10,
+ "casherId": 1,
+ "receptionTime": 1761781437572,
+ "paymentType": 1,
+ "price": 0
+},
+{
+ "order": [
+  {
+   "flag": 14
+  },
+  {
+   "flag": 34
+  }
+ ],
+ "serial": 9,
+ "casherId": 1,
+ "receptionTime": 1761781437572,
+ "paymentType": 1,
+ "price": 0
+},
+{
+ "order": [
+  {
+   "flag": 33
+  }
+ ],
+ "serial": 11,
+ "casherId": 1,
+ "receptionTime": 1761781437572,
+ "paymentType": 1,
+ "price": 0
+},
+{
+ "order": [
+  {
+   "flag": 39
+  },
+  {
+   "flag": 50
+  }
+ ],
+ "serial": 11,
+ "casherId": 1,
+ "receptionTime": 1761784124145,
+ "paymentType": 1,
+ "price": 0
+},

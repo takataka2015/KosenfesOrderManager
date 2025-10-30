@@ -335,7 +335,7 @@ export default function ControllPanel() {
               整理券番号
             </div>
             <input
-              className="h-4/5 w-1/3 text-center text-2xl rounded-md bg-white"
+              className="h-4/5 w-1/3 text-center text-3xl rounded-md bg-white"
               type="number"
               placeholder="3"
               min={1}
@@ -349,7 +349,7 @@ export default function ControllPanel() {
               レジ番ID
             </div>
             <input
-              className=" h-4/5 w-1/3 text-center text-2xl rounded-md bg-white"
+              className=" h-4/5 w-1/3 text-center text-3xl rounded-md bg-white"
               type="number"
               placeholder="出席番号"
               min={1}
@@ -363,6 +363,9 @@ export default function ControllPanel() {
 
         {/* 支払方法（3ボタン） */}
         <div className="w-full col-span-3">
+          <span className="flex w-full justify-center font-bold bg-amber-300 mb-0.5 rounded-sm">
+            決済方法（選択必須）
+          </span>
           <div className="flex gap-2">
             <button
               className={`flex-1 text-2xl p-4 rounded ${

@@ -177,7 +177,7 @@ export default function CurrentOrder() {
   return (
     <div className="flex flex-col h-screen">
       <div className="bg-amber-500 p-3 flex justify-between items-center sticky top-0 z-10 font-semibold">
-        <span>現在の注文</span>
+        <span className="text-2xl">現在の注文</span>
         {saving && <span className="text-sm opacity-70">保存中…</span>}
       </div>
 
@@ -199,11 +199,11 @@ export default function CurrentOrder() {
         </div>
       </div>
 
-      <div className="fixed w-1/4 min-w-60 bottom-0 left-0 right-0 bg-amber-400 shadow-lg z-20">
+      <div className="w-full min-w-60 h-1/4 text-xl bottom-0 left-0 right-0 bg-amber-400 z-20">
         <div className="w-full border-t-2 font-bold p-3 space-y-2">
-          <div className="flex justify-between border-b border-dashed pb-1">
+          <div className="flex justify-between text-2xl border-b border-dashed pb-1">
             <span>合計</span>
-            <span className="text-xl">
+            <span className="text-3xl">
               ￥
               {lastTable
                 ? lastTable.order.reduce(
@@ -228,9 +228,9 @@ export default function CurrentOrder() {
             </span>
           </div> */}
           {/* ↑なんかうまく表示できなくなっちゃったので消し炭にしてやりました */}
-          <div className="w-full flex justify-end pt-2">
+          <div className="w-full flex justify-end pt-6">
             <button
-              className="bg-amber-600 text-white font-bold py-2 px-4 rounded
+              className="bg-amber-600 text-white font-bold w-full text-2xl py-3 px-4 rounded
                          hover:bg-amber-700 active:bg-amber-800 disabled:opacity-50"
               disabled={!lastTable || saving}
               onClick={handleConfirm}
@@ -240,8 +240,6 @@ export default function CurrentOrder() {
           </div>
         </div>
       </div>
-
-      <div className="h-24" />
     </div>
   );
 }

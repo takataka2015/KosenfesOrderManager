@@ -72,7 +72,7 @@ export default function CurrentOrder() {
       const s = Number(localStorage.getItem("kosen:serial"));
       const c = Number(localStorage.getItem("kosen:casherId"));
       const p = Number(localStorage.getItem("kosen:paymentType"));
-      const MAX_SERIAL = 24; // ここは運用上の最大値に合わせて必要なら変更
+      const MAX_SERIAL = 40; // ここは運用上の最大値に合わせて必要なら変更
       const serial = Number.isFinite(s)
         ? Math.min(MAX_SERIAL, Math.max(1, Math.floor(s)))
         : 1;
@@ -111,7 +111,7 @@ export default function CurrentOrder() {
         last.paymentType = paymentType; // getter回避で小文字へ
       }
 
-      // 8) 新規注文（serial+1、素うどん1つ）を末尾に追加
+      // 8) 新規注文（serial+1）を末尾に追加
       const newOrder = {
         serial: serialNext,
         casherId,

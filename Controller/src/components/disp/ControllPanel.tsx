@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import menuConfig from "../../../informationLog/config/menuConfig.json";
 import { OrderManager } from "../../../component/utility/OrderManager";
-import AcceptingOrder from "./AcceptingOrder";
+//import AcceptingOrder from "./AcceptingOrder";
 
 // Flagが index でも bit 値でも動くように正規化（tsx内ユーティリティ）
 const toBit = (raw: unknown, fallbackIndex: number) => {
@@ -45,7 +45,7 @@ export default function ControllPanel() {
   // 末尾が [] だったかを保持（読み込み後の1回の操作まで有効）
   const tailWasEmptyRef = useRef(false);
 
-  // ★ 新規：整理券番号(1-24) / レジ番ID(1-45)
+  // ★ 新規：整理券番号(1-40) / レジ番ID(1-45)
   const [serial, setSerial] = useState<number>(1);
   const [casherId, setCasherId] = useState<number>(1);
 
@@ -54,7 +54,7 @@ export default function ControllPanel() {
     const s = Number(localStorage.getItem("kosen:serial"));
     const c = Number(localStorage.getItem("kosen:casherId"));
     const p = Number(localStorage.getItem("kosen:paymentType"));
-    if (Number.isFinite(s) && s >= 1 && s <= 24) setSerial(s);
+    if (Number.isFinite(s) && s >= 1 && s <= 40) setSerial(s);
     if (Number.isFinite(c) && c >= 1 && c <= 45) setCasherId(c);
     if (p === 1 || p === 2) setPaymentType(p);
   }, []);
@@ -105,7 +105,7 @@ export default function ControllPanel() {
       });
     } else {
       const last = arr[arr.length - 1] as any;
-      last.serial = clampInt(serial, 1, 24);
+      last.serial = clampInt(serial, 1, 40);
       last.casherId = clampInt(casherId, 1, 45);
       // PaymentType が getter の場合に備え、小文字側も保持
       if (
@@ -209,7 +209,7 @@ export default function ControllPanel() {
     const lastIdx = arr.length - 1;
     if (lastIdx >= 0 && arr[lastIdx] && !Array.isArray(arr[lastIdx])) {
       arr[lastIdx].paymentType = type; // getter回避のため小文字に書く
-      arr[lastIdx].serial = Math.min(24, Math.max(1, Math.floor(serial)));
+      arr[lastIdx].serial = Math.min(40, Math.max(1, Math.floor(serial)));
       arr[lastIdx].casherId = Math.min(45, Math.max(1, Math.floor(casherId)));
     } else if (lastIdx < 0 || Array.isArray(arr[lastIdx])) {
       // 念のため：履歴しかない or 末尾が配列なら、新規注文を1件足して設定
@@ -350,7 +350,7 @@ export default function ControllPanel() {
           </div>
         </div>
       </div>
-      <AcceptingOrder />
+      {/* <AcceptingOrder /> */}
     </div>
   );
 }

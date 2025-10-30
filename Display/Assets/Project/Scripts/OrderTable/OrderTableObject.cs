@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OrderTableObject : MonoBehaviour
 {
-    ButtonText text;
+    public ButtonText text;
     OrderTableButton button;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -38,7 +38,7 @@ public class OrderTableObject : MonoBehaviour
     }
 }
 
-class ButtonText
+public class ButtonText
 {
     public TextMeshProUGUI header;
     public TextMeshProUGUI body;

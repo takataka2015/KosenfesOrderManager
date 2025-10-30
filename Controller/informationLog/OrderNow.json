@@ -2,15 +2,42 @@
   {
     "order": [
       {
-        "flag": 33
+        "flag": 6
       },
       {
-        "flag": 61
+        "flag": 8
       }
     ],
-    "serial": 8,
+    "serial": 12,
     "casherId": 1,
-    "receptionTime": 1761760351673,
+    "receptionTime": 1761784124145,
+    "paymentType": 1,
+    "price": 0
+  },
+  {
+    "order": [
+      {
+        "flag": 12
+      },
+      {
+        "flag": 33
+      }
+    ],
+    "serial": 13,
+    "casherId": 1,
+    "receptionTime": 1761784124145,
+    "paymentType": 1,
+    "price": 0
+  },
+  {
+    "order": [
+      {
+        "flag": 32
+      }
+    ],
+    "serial": 14,
+    "casherId": 1,
+    "receptionTime": 1761784124145,
     "paymentType": 1,
     "price": 0
   }

@@ -1,3 +1,4 @@
+using TMPro;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,33 +7,41 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class OrderTableButton : MonoBehaviour,CustomButton
+public class CallingTableButton : MonoBehaviour, CustomButton
 {
     public System.Action onClickCallback;
-    [SerializeField] GameObject callingTableObject;
-    CallingTableButton callingTableButton;
-    FilePath path;
+    TextMeshProUGUI callingnumber;
     Vector3 baseScale;
-    int serial;
-    
+
     GameObject buttonObject;
     Image buttonImage;
     bool isHover;
 
     public void Awake()
     {
-        path = new();
-        onClickCallback=()=>ClearRequest(serial);
         buttonObject = transform.parent.GetChild(0).gameObject;
         buttonImage = buttonObject.GetComponent<Image>();
-        callingTableButton = callingTableObject.GetComponent<CallingTableButton>();
+        callingnumber = transform.parent.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
         baseScale = transform.localScale;
         isHover = false;
+        onClickCallback = () => Served();
+        SetInActive();
     }
 
-    public void SetActive(int number)
+    public void SetCallingNumber(int serial)
     {
-        serial = number;
+        callingnumber.text = $"{serial}";
+        SetActive();
+    }
+
+    void Served()
+    {
+        callingnumber.text = "";
+        SetInActive();
+    }
+
+    public void SetActive()
+    {
         transform.localScale = baseScale;
     }
 
@@ -40,33 +49,24 @@ public class OrderTableButton : MonoBehaviour,CustomButton
     {
         transform.localScale = Vector3.zero;
     }
-    
-    public void ClearRequest(int serial)
-    {
-        HashSet<int> request=new();
-        JsonUtility.FromJson<SerialJson>(File.ReadAllText(path.Request, System.Text.Encoding.UTF8)).serials.ToList().ForEach(serial=>request.Add(serial));
-        request.Add(serial);
-        File.WriteAllText(path.Request, JsonUtility.ToJson(new SerialJson(request.ToArray())));
-        callingTableButton.SetCallingNumber(serial);
-    }
 
     void Hover()
     {
         isHover = true;
-        buttonImage.DOColor(new Color(0.7f, 0.7f, 0.7f), 0.24f).SetEase(Ease.OutQuad);
+        buttonImage.DOColor(new Color(1f, 1f, 1f, 1f), 0.24f).SetEase(Ease.OutQuad);
     }
 
     void DeHover()
     {
         isHover = false;
         buttonObject.transform.DOScale(1f, 0.24f).SetEase(Ease.OutQuad);
-        buttonImage.DOColor(new Color(0.5f, 0.5f, 0.5f), 0.24f).SetEase(Ease.OutQuad);
+        buttonImage.DOColor(new Color(1f, 1f, 1f, 0.7f), 0.24f).SetEase(Ease.OutQuad);
     }
 
     void Push()
     {
         buttonObject.transform.DOScale(0.95f, 0.24f).SetEase(Ease.InOutCubic);
-        buttonImage.DOColor(new Color(0.4f, 0.4f, 0.4f), 0.24f).SetEase(Ease.InOutCubic);
+        buttonImage.DOColor(new Color(0.8f, 0.8f, 0.8f, 0.6f), 0.24f).SetEase(Ease.InOutCubic);
     }
 
     void DePush()
@@ -74,7 +74,7 @@ public class OrderTableButton : MonoBehaviour,CustomButton
         buttonObject.transform.DOScale(1f, 0.24f).SetEase(Ease.InOutCubic);
         if (isHover)
         {
-            buttonImage.DOColor(new Color(0.7f, 0.7f, 0.7f), 0.24f).SetEase(Ease.InOutCubic);
+            buttonImage.DOColor(new Color(1f, 1f, 1f, 0.7f), 0.24f).SetEase(Ease.InOutCubic);
         }
     }
 

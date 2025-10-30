@@ -227,6 +227,7 @@ export default function CurrentOrder() {
               })()}
             </span>
           </div> */}
+          {/* ↑なんかうまく表示できなくなっちゃったので消し炭にしてやりました */}
           <div className="w-full flex justify-end pt-2">
             <button
               className="bg-amber-600 text-white font-bold py-2 px-4 rounded

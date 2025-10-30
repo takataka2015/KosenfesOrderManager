@@ -40,7 +40,7 @@ export default function ControllPanel() {
   const manager = managerRef.current;
 
   const [saving, setSaving] = useState(false);
-  const [paymentType, setPaymentType] = useState(1);
+  const [paymentType, setPaymentType] = useState(0); // 0=未選択
 
   // 末尾が [] だったかを保持（読み込み後の1回の操作まで有効）
   const tailWasEmptyRef = useRef(false);
@@ -56,7 +56,8 @@ export default function ControllPanel() {
     const p = Number(localStorage.getItem("kosen:paymentType"));
     if (Number.isFinite(s) && s >= 1 && s <= 40) setSerial(s);
     if (Number.isFinite(c) && c >= 1 && c <= 45) setCasherId(c);
-    if (p === 1 || p === 2) setPaymentType(p);
+    if (p === 1 || p === 2 || p === 3) setPaymentType(p);
+    // それ以外は未選択(0)のまま
   }, []);
 
   // 変更検知で保存
@@ -72,24 +73,55 @@ export default function ControllPanel() {
     localStorage.setItem("kosen:paymentType", String(paymentType));
   }, [paymentType]);
 
+  // 下書きのキー
+  const DRAFT_KEY = "kosen:draft";
+
+  // 下書きを localStorage へ保存（★配列ではなく“1件オブジェクト”だけ保存）
+  const saveDraft = () => {
+    const arr = JSON.parse(manager.WriteOrder()) as any[];
+    const last = (Array.isArray(arr) && arr.length > 0
+      ? arr[arr.length - 1]
+      : undefined) ?? {
+      serial,
+      casherId,
+      paymentType,
+      PaymentType: paymentType, // ← 表記揺れ対策
+      receptionTime: Date.now(),
+      order: [],
+    };
+    // メタを最新UI値で上書き
+    const single = {
+      ...last,
+      serial: clampInt(serial, 1, 40),
+      casherId: clampInt(casherId, 1, 45),
+      paymentType,
+      PaymentType: paymentType, // ← 表記揺れ対策
+    };
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(single));
+    window.dispatchEvent(new CustomEvent("order:updated"));
+  };
+
+  // 下書きを読み込み（★1件オブジェクトを [obj] に包んで Manager に適用）
+  const loadDraftIfAny = (): boolean => {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return false;
+    try {
+      const obj = JSON.parse(raw);
+      manager.ReadOrder([obj]);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
   // ---- サーバ <-> Manager 同期 ----
   const loadLatestIntoManager = async () => {
-    const res = await fetch("/api/readOrder", { cache: "no-store" });
-    if (!res.ok) throw new Error(`readOrder failed: ${res.status}`);
-    const json = await res.json();
-
-    // 末尾が [] なら「履歴だけ」を Manager に読み込む
-    const tail = Array.isArray(json) ? json[json.length - 1] : undefined;
-    const safeForManager = Array.isArray(tail) ? json.slice(0, -1) : json;
-    tailWasEmptyRef.current = Array.isArray(tail);
-
-    manager.ReadOrder(safeForManager);
-
-    const last: any = manager.orderTable.at(-1);
-    if (last) {
-      const pt = last.PaymentType ?? last.paymentType ?? 1;
-      setPaymentType(pt);
-    }
+    // 1) 下書きがあればそれだけ読み込む
+    if (loadDraftIfAny()) return;
+    // 2) 下書きが無い場合は“編集開始＝まっさら”で始める
+    tailWasEmptyRef.current = false;
+    manager.ReadOrder([]); // ★サーバの OrderNow は読まない
+    setPaymentType(0); // ★未選択のまま
   };
 
   // ★ 末尾注文へ serial/casherId を確実にスタンプする（保存直前に毎回実行）
@@ -100,6 +132,7 @@ export default function ControllPanel() {
         serial,
         casherId,
         paymentType, // 既存UIの状態も保持
+        PaymentType: paymentType, // ← 表記揺れ対策
         receptionTime: Date.now(),
         order: [],
       });
@@ -107,13 +140,11 @@ export default function ControllPanel() {
       const last = arr[arr.length - 1] as any;
       last.serial = clampInt(serial, 1, 40);
       last.casherId = clampInt(casherId, 1, 45);
-      // PaymentType が getter の場合に備え、小文字側も保持
-      if (
-        typeof last.paymentType !== "number" &&
-        typeof last.PaymentType === "number"
-      ) {
+      // 常に両方そろえる
+      if (typeof last.paymentType === "number")
+        last.PaymentType = last.paymentType;
+      if (typeof last.PaymentType === "number")
         last.paymentType = last.PaymentType;
-      }
     }
     manager.ReadOrder(arr);
   };
@@ -148,19 +179,30 @@ export default function ControllPanel() {
   const maxNum: any = 40;
   // ★ 注文確定後（CurrentOrder 側が発火）に整理券番号を +1（maxNum→1）
   useEffect(() => {
-    const onConfirmed = () => setSerial((s) => (s % maxNum) + 1);
+    const onConfirmed = () => {
+      setSerial((s) => (s % maxNum) + 1); // 1..40で循環
+      setPaymentType(0); // 支払方法を未選択へ
+      // ★確定後は編集用マネージャを完全クリア（復活防止の本丸）
+      manager.ReadOrder([]);
+      // ★何も下書きを作らない・pushしない（次の空注文は作らない）
+      localStorage.removeItem(DRAFT_KEY);
+      window.dispatchEvent(new CustomEvent("order:updated"));
+    };
     window.addEventListener("order:confirmed", onConfirmed);
     return () => window.removeEventListener("order:confirmed", onConfirmed);
   }, []);
 
-  // ---- 末尾の注文/アイテムを保証 ----
+  // ---- 末尾の注文/アイテムを保証（★最大1件のまま運用）----
   const ensureActiveOrder = () => {
-    if (manager.orderTable.length === 0 || tailWasEmptyRef.current) {
-      // ★ ここで新しい注文配列を末尾に作成
-      manager.AddOrder(Date.now(), casherId, paymentType);
-      // 一度使ったらリセット（次の操作で誤判定しないように）
-      tailWasEmptyRef.current = false;
+    // ★ドラフトがない or Manager が空なら、新規1件だけ用意
+    const hasDraft = !!localStorage.getItem(DRAFT_KEY);
+    if (!hasDraft && manager.orderTable.length > 0) {
+      // 矛盾状態を避けるため空で初期化
+      manager.ReadOrder([]);
     }
+    if (manager.orderTable.length >= 1) return manager.orderTable.at(-1)!;
+    // 1件も無いときだけ新規作成（AddOrderは配列末尾に1件だけ作る）
+    manager.AddOrder(Date.now(), casherId, paymentType);
     return manager.orderTable.at(-1)!;
   };
 
@@ -176,7 +218,7 @@ export default function ControllPanel() {
     await loadLatestIntoManager();
     const last = ensureActiveOrder() as any; // ★ ポイント
     last.Additem();
-    await writeManagerToServer();
+    saveDraft();
   };
 
   // トッピング（OR固定）：最後のアイテムに AddFlag(bit)
@@ -185,7 +227,7 @@ export default function ControllPanel() {
     const bit = toBit(rawFlag, idx);
     const lastItem: any = ensureLastItemExists(); // ★ ポイント
     lastItem.AddFlag(bit);
-    await writeManagerToServer();
+    saveDraft();
   };
 
   // トッピング全消し（flag=0）
@@ -194,7 +236,7 @@ export default function ControllPanel() {
     const lastItem: any = ensureLastItemExists();
     // クリア用のメソッドが無くても flag を 0 にすればOK
     lastItem.flag = 0;
-    await writeManagerToServer();
+    saveDraft();
   };
 
   // 支払方法「明示セット」：末尾が [] のときは“新しい注文”を作ってから設定
@@ -209,6 +251,7 @@ export default function ControllPanel() {
     const lastIdx = arr.length - 1;
     if (lastIdx >= 0 && arr[lastIdx] && !Array.isArray(arr[lastIdx])) {
       arr[lastIdx].paymentType = type; // getter回避のため小文字に書く
+      arr[lastIdx].PaymentType = type; // ← 追加
       arr[lastIdx].serial = Math.min(40, Math.max(1, Math.floor(serial)));
       arr[lastIdx].casherId = Math.min(45, Math.max(1, Math.floor(casherId)));
     } else if (lastIdx < 0 || Array.isArray(arr[lastIdx])) {
@@ -217,6 +260,7 @@ export default function ControllPanel() {
         serial: Math.min(maxNum, Math.max(1, Math.floor(serial))),
         casherId: Math.min(45, Math.max(1, Math.floor(casherId))),
         paymentType: type,
+        PaymentType: type, // ← 追加
         receptionTime: Date.now(),
         order: [],
       });
@@ -225,7 +269,9 @@ export default function ControllPanel() {
     // 反映 → 保存
     manager.ReadOrder(arr);
     setPaymentType(type);
-    await writeManagerToServer();
+    saveDraft();
+    // 念のため即座に再取得イベント（ダブルクリック回避の保険）
+    window.dispatchEvent(new CustomEvent("order:updated"));
   };
 
   // ---- 入力ハンドラ（見た目はそのまま・機能だけ追加） ----
@@ -315,7 +361,7 @@ export default function ControllPanel() {
           </div>
         </div>
 
-        {/* 支払方法（4ボタン） */}
+        {/* 支払方法（3ボタン） */}
         <div className="w-full col-span-3">
           <div className="flex gap-2">
             <button

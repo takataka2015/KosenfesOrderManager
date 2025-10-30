@@ -50,6 +50,12 @@ export class OrderTable {
     Additem() {
         this.order.push(new Flag(0));
     }
+
+    SetMoney(money: number): number {
+        this.price = money;
+        console.log("price", this.price);
+        return this.price;
+    }
 }
 
 export type TOrderTable = {
@@ -59,6 +65,7 @@ export type TOrderTable = {
     casherId: number;
     receptionTime: number;
     paymentType: number;
+    price: number;
 }
 
 export class Flag {

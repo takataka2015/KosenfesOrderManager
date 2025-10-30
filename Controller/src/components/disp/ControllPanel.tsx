@@ -282,8 +282,8 @@ export default function ControllPanel() {
         </div>
 
         {/* 整理券番号入力（機能のみ付与） */}
-        <div className="flex flex-col col-span-2 row-span-2 gap-2 justify-between">
-          <div className="h-full flex items-center justify-between bg-lime-400 rounded-md p-2">
+        <div className="flex flex-row col-span-4 row-span-2 gap-2 justify-between">
+          <div className="h-full w-1/2 flex items-center justify-between bg-lime-400 rounded-md p-2">
             <div className="flex justify-center items-center text-2xl m-4">
               整理券番号
             </div>
@@ -297,7 +297,7 @@ export default function ControllPanel() {
               onChange={onChangeSerial}
             />
           </div>
-          <div className="h-full flex items-center justify-between bg-blue-400 rounded-md p-2">
+          <div className="h-full w-1/2 flex items-center justify-between bg-blue-400 rounded-md p-2">
             <div className="flex justify-center items-center text-2xl m-4">
               レジ番ID
             </div>
@@ -342,16 +342,9 @@ export default function ControllPanel() {
               disabled={saving}
               onClick={() => setPayment(3)}
             >
-              クレジット
-            </button>
-            <button
-              className={`flex-1 text-2xl p-4 rounded ${
-                paymentType === 4 ? "bg-yellow-500" : "bg-yellow-200"
-              } hover:opacity-50 disabled:opacity-100`}
-              disabled={saving}
-              onClick={() => setPayment(4)}
-            >
-              交通系IC
+              その他
+              <br />
+              キャッシュレス
             </button>
           </div>
         </div>

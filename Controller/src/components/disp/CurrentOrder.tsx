@@ -79,8 +79,7 @@ export default function CurrentOrder() {
       const casherId = Number.isFinite(c)
         ? Math.min(45, Math.max(1, Math.floor(c)))
         : 1;
-      const paymentType =
-        p === 1 || p === 2 || p === 3 || p === 4 ? (p as 1 | 2 | 3 | 4) : 1;
+      const paymentType = p === 1 || p === 2 || p === 3 ? (p as 1 | 2 | 3) : 1;
 
       // 2) 現在の配列を取得
       const res = await fetch("/api/readOrder", { cache: "no-store" });
@@ -94,40 +93,10 @@ export default function CurrentOrder() {
         ? current.length - 2
         : current.length - 1;
 
-      // 4) 既存で使用中の serial を収集（“配列要素”は履歴なので除外）
-      const usedSerials: number[] = [];
-      current.forEach((v, i) => {
-        if (!Array.isArray(v) && typeof v?.serial === "number") {
-          usedSerials.push(v.serial);
-        }
-      });
-
-      // 5) 今回反映したい serial が「他の注文」で既に使われていないか判定
-      const isSerialUsedByOthers = usedSerials.some((sr, i) => {
-        // sr が一致し、かつ “自分（lastObjIndex）以外” が保持しているなら NG
-        if (i === lastObjIndex) return false;
-        return sr === serial;
-      });
-
-      if (isSerialUsedByOthers) {
-        // 衝突。保存せずにエラーを通知
-        window.alert(
-          `整理券番号 ${serial} は既に使用中です。` +
-            `「整理券番号」を別の値に変更してから確定してください。`
-        );
-        return; // ここで処理を中断（確定しない）
-      }
-
-      // 6) 新規注文に付与予定の serialNext も重複チェック（任意だが安全のため）
+      // （重複チェックを無効化）
+      // クライアント側での整理券番号の重複チェックを永続的に許可するため、
+      // usedSerials の収集および既存/次番号の重複判定は行いません。
       const serialNext = (serial % MAX_SERIAL) + 1;
-      const isSerialNextUsed = usedSerials.includes(serialNext);
-      if (isSerialNextUsed) {
-        window.alert(
-          `次の整理券番号 ${serialNext} が既に使用中のため、注文を確定できません。` +
-            `先に重複した整理券の呼び出し・処理を行うか、現在の整理券番号を調整してください。`
-        );
-        return; // 新規行の初期化も行わない
-      }
 
       // 7) 直前の注文へ meta を反映
       if (
@@ -186,7 +155,7 @@ export default function CurrentOrder() {
   // これまで: orderManager.ReadOrder(orderNow ?? []);
   orderManager.ReadOrder(safeData);
 
-  const basePrice = 200;
+  const basePrice = 300;
   const moneyCalc = (menu: Menu[], flag: Flag) =>
     menu
       .filter((m) => flag.HasFlag(m.Flag ?? 0))
@@ -244,10 +213,7 @@ export default function CurrentOrder() {
                 : (lastTable?.PaymentType ??
                     (lastTable as any)?.paymentType) === 2
                 ? "PayPay"
-                : (lastTable?.PaymentType ??
-                    (lastTable as any)?.paymentType) === 3
-                ? "クレジット"
-                : "交通系IC"}
+                : "その他キャッシュレス"}
             </span>
           </div>
           <div className="w-full flex justify-end pt-2">

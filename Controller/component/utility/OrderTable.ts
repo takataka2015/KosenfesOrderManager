@@ -27,8 +27,8 @@ export class OrderTable {
     /**
      * 注文受付時間
      */
-    get ReceptionTime(): number {
-        return this.receptionTime;
+    get ReceptionTime(): string {
+        return new Date(this.receptionTime).toLocaleString();
     }
     /**
      * 支払い方法

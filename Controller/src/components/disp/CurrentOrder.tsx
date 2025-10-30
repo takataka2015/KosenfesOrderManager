@@ -117,7 +117,7 @@ export default function CurrentOrder() {
         casherId,
         paymentType,
         receptionTime: Date.now(),
-        order: [{ flag: 0 }],
+        order: [],
       };
       const updated = Array.isArray(current)
         ? [...current, newOrder]

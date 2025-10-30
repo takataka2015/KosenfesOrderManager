@@ -282,9 +282,9 @@ export default function ControllPanel() {
         </div>
 
         {/* 整理券番号入力（機能のみ付与） */}
-        <div className="flex flex-row col-span-4 row-span-2 gap-2 justify-between">
+        <div className="flex flex-row col-span-3 row-span-1 gap-2 justify-between">
           <div className="h-full w-1/2 flex items-center justify-between bg-lime-400 rounded-md p-2">
-            <div className="flex justify-center items-center text-2xl m-4">
+            <div className="flex justify-center items-center text-2xl">
               整理券番号
             </div>
             <input

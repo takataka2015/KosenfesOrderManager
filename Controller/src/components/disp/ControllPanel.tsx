@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import menuConfig from "../../../informationLog/config/menuConfig.json";
 import { OrderManager } from "../../../component/utility/OrderManager";
+import AcceptingOrder from "./AcceptingOrder";
 
 // Flagが index でも bit 値でも動くように正規化（tsx内ユーティリティ）
 const toBit = (raw: unknown, fallbackIndex: number) => {
@@ -197,7 +198,7 @@ export default function ControllPanel() {
   };
 
   // 支払方法「明示セット」：末尾が [] のときは“新しい注文”を作ってから設定
-  const setPayment = async (type: 1 | 2 | 3 | 4) => {
+  const setPayment = async (type: 1 | 2 | 3) => {
     await loadLatestIntoManager();
 
     // ← 重要：末尾が [] だった場合に必ず新規注文を作る
@@ -282,9 +283,9 @@ export default function ControllPanel() {
         </div>
 
         {/* 整理券番号入力（機能のみ付与） */}
-        <div className="flex flex-col col-span-2 row-span-2 gap-2 justify-between">
-          <div className="h-full flex items-center justify-between bg-lime-400 rounded-md p-2">
-            <div className="flex justify-center items-center text-2xl m-4">
+        <div className="flex flex-row col-span-3 row-span-1 gap-2 justify-between">
+          <div className="h-full w-1/2 flex items-center justify-between bg-lime-400 rounded-md p-2">
+            <div className="flex justify-center items-center text-2xl">
               整理券番号
             </div>
             <input
@@ -297,7 +298,7 @@ export default function ControllPanel() {
               onChange={onChangeSerial}
             />
           </div>
-          <div className="h-full flex items-center justify-between bg-blue-400 rounded-md p-2">
+          <div className="h-full w-1/2 flex items-center justify-between bg-blue-400 rounded-md p-2">
             <div className="flex justify-center items-center text-2xl m-4">
               レジ番ID
             </div>
@@ -342,20 +343,14 @@ export default function ControllPanel() {
               disabled={saving}
               onClick={() => setPayment(3)}
             >
-              クレジット
-            </button>
-            <button
-              className={`flex-1 text-2xl p-4 rounded ${
-                paymentType === 4 ? "bg-yellow-500" : "bg-yellow-200"
-              } hover:opacity-50 disabled:opacity-100`}
-              disabled={saving}
-              onClick={() => setPayment(4)}
-            >
-              交通系IC
+              その他
+              <br />
+              キャッシュレス
             </button>
           </div>
         </div>
       </div>
+      <AcceptingOrder />
     </div>
   );
 }

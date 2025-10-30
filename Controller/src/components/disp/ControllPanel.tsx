@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import menuConfig from "../../../informationLog/config/menuConfig.json";
 import { OrderManager } from "../../../component/utility/OrderManager";
+import AcceptingOrder from "./AcceptingOrder";
 
 // Flagが index でも bit 値でも動くように正規化（tsx内ユーティリティ）
 const toBit = (raw: unknown, fallbackIndex: number) => {
@@ -197,7 +198,7 @@ export default function ControllPanel() {
   };
 
   // 支払方法「明示セット」：末尾が [] のときは“新しい注文”を作ってから設定
-  const setPayment = async (type: 1 | 2 | 3 | 4) => {
+  const setPayment = async (type: 1 | 2 | 3) => {
     await loadLatestIntoManager();
 
     // ← 重要：末尾が [] だった場合に必ず新規注文を作る
@@ -349,6 +350,7 @@ export default function ControllPanel() {
           </div>
         </div>
       </div>
+      <AcceptingOrder />
     </div>
   );
 }

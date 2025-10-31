@@ -19,9 +19,32 @@ export default function CurrentOrder() {
   const [saving, setSaving] = useState(false);
 
   const fetchNow = async () => {
-    const res = await fetch("/api/readOrder", { cache: "no-store" });
-    if (!res.ok) throw new Error(`readOrder failed: ${res.status}`);
-    setOrderNow(await res.json());
+    const raw = localStorage.getItem("kosen:draft");
+    if (raw) {
+      try {
+        const obj = JSON.parse(raw);
+        // 表記揺れを正規化（片方しか無くても両方揃える）
+        if (
+          typeof obj.paymentType === "number" &&
+          typeof obj.PaymentType !== "number"
+        ) {
+          obj.PaymentType = obj.paymentType;
+        }
+        if (
+          typeof obj.PaymentType === "number" &&
+          typeof obj.paymentType !== "number"
+        ) {
+          obj.paymentType = obj.PaymentType;
+        }
+        setOrderNow([obj]); // ★[obj] にして UI/Manager と整合
+        return;
+      } catch (e) {
+        console.error("draft parse error", e);
+      }
+    }
+
+    // ドラフトが無ければ“現在の注文”は空にする
+    setOrderNow([]);
   };
 
   useEffect(() => {
@@ -48,97 +71,83 @@ export default function CurrentOrder() {
 
       lastTable.order.splice(rowIndex, 1);
 
-      setSaving(true);
-      fetch("/api/writeOrder", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(next),
-      })
-        .then(() => {
-          window.dispatchEvent(new CustomEvent("order:updated"));
-        })
-        .catch(console.error)
-        .finally(() => setSaving(false));
+      // ★サーバ書込はしない→下書き更新のみ
+      localStorage.setItem("kosen:draft", JSON.stringify(lastTable));
+      window.dispatchEvent(new CustomEvent("order:updated"));
 
-      return next;
+      return [lastTable]; // 表示は1件
     });
   };
 
-  // 注文確定（重複チェック付き）
+  // 注文確定（下書きからサーバへ保存。検証＋合計金額をpriceへ）
   const handleConfirm = async () => {
     setSaving(true);
     try {
-      // 1) ControllPanel 側の最新値を取得
+      const MAX_SERIAL = 40;
+
+      // 1) ControllPanel 側の最新値
       const s = Number(localStorage.getItem("kosen:serial"));
       const c = Number(localStorage.getItem("kosen:casherId"));
       const p = Number(localStorage.getItem("kosen:paymentType"));
-      const MAX_SERIAL = 40; // ここは運用上の最大値に合わせて必要なら変更
       const serial = Number.isFinite(s)
         ? Math.min(MAX_SERIAL, Math.max(1, Math.floor(s)))
         : 1;
       const casherId = Number.isFinite(c)
         ? Math.min(45, Math.max(1, Math.floor(c)))
         : 1;
-      const paymentType = p === 1 || p === 2 || p === 3 ? (p as 1 | 2 | 3) : 1;
+      const paymentType = p === 1 || p === 2 || p === 3 ? p : 0; // 0=未選択
+      // 2) 下書き1件を取得
+      const raw = localStorage.getItem("kosen:draft");
+      if (!raw) {
+        alert("下書きがありません。先に注文を作成してください。");
+        return;
+      }
+      let last = JSON.parse(raw);
 
-      // 2) 現在の配列を取得
-      const res = await fetch("/api/readOrder", { cache: "no-store" });
-      const current: any[] = res.ok ? await res.json() : [];
+      // 3) メタ反映 & 検証
+      last.serial = serial;
+      last.casherId = casherId;
+      last.paymentType = paymentType;
 
-      // 3) 直前の注文（オブジェクト側）の index を特定
-      const tail = Array.isArray(current)
-        ? current[current.length - 1]
-        : undefined;
-      const lastObjIndex = Array.isArray(tail)
-        ? current.length - 2
-        : current.length - 1;
-
-      // （重複チェックを無効化）
-      // クライアント側での整理券番号の重複チェックを永続的に許可するため、
-      // usedSerials の収集および既存/次番号の重複判定は行いません。
-      const serialNext = (serial % MAX_SERIAL) + 1;
-
-      // 7) 直前の注文へ meta を反映
-      if (
-        Array.isArray(current) &&
-        lastObjIndex >= 0 &&
-        current[lastObjIndex] &&
-        !Array.isArray(current[lastObjIndex])
-      ) {
-        const last = current[lastObjIndex] as any;
-        last.serial = serial;
-        last.casherId = casherId;
-        last.paymentType = paymentType; // getter回避で小文字へ
+      if (!(last.paymentType >= 1 && last.paymentType <= 3)) {
+        alert("支払方法が未選択です。選択してください。");
+        return;
+      }
+      if (!Array.isArray(last.order) || last.order.length === 0) {
+        alert("焼うどんが1つもありません。追加してください。");
+        return;
       }
 
-      // 8) 新規注文（serial+1）を末尾に追加
-      const newOrder = {
-        serial: serialNext,
-        casherId,
-        paymentType,
-        receptionTime: Date.now(),
-        order: [],
-      };
-      const updated = Array.isArray(current)
-        ? [...current, newOrder]
-        : [newOrder];
+      // 4) 合計金額を算出して price に書き込む
+      const basePrice = 300; // 既存UIのベース価格に合わせる
+      const total = last.order.reduce(
+        (prev: number, cur: any) =>
+          prev +
+          new OrderManager().menu
+            .filter((m) => new Flag(cur.flag).HasFlag(m.Flag ?? 0))
+            .reduce((sum, m) => sum + m.Price, 0) +
+          basePrice,
+        0
+      );
+      last.price = total;
 
-      // 9) 書き込み → 再取得 → 通知
+      // 5) サーバの現状を読み取り → 下書き1件を末尾に push → 保存
+      const res = await fetch("/api/readOrder", { cache: "no-store" });
+      const current = res.ok ? await res.json() : [];
+      const updated = Array.isArray(current) ? [...current, last] : [last];
+
       await fetch("/api/writeOrder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updated),
       });
 
-      await fetchNow(); // 一度情報を更新
+      // 6) 下書きをクリアし、確定イベント
+      localStorage.removeItem("kosen:draft");
+      localStorage.setItem("kosen:paymentType", "0"); // ← 念のためローカルも未選択へ
+      await fetchNow();
       window.dispatchEvent(new CustomEvent("order:updated"));
       window.dispatchEvent(new CustomEvent("order:confirmed"));
-
-      await fetch("/api/order/auto-sweep", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "start", intervalMs: 1000 }),
-      });
     } catch (err) {
       console.error(err);
     } finally {
@@ -168,7 +177,7 @@ export default function CurrentOrder() {
   return (
     <div className="flex flex-col h-screen">
       <div className="bg-amber-500 p-3 flex justify-between items-center sticky top-0 z-10 font-semibold">
-        <span>現在の注文</span>
+        <span className="text-2xl">現在の注文</span>
         {saving && <span className="text-sm opacity-70">保存中…</span>}
       </div>
 
@@ -190,11 +199,11 @@ export default function CurrentOrder() {
         </div>
       </div>
 
-      <div className="fixed w-1/4 min-w-60 bottom-0 left-0 right-0 bg-amber-400 shadow-lg z-20">
+      <div className="w-full min-w-60 h-1/4 text-xl bottom-0 left-0 right-0 bg-amber-400 z-20">
         <div className="w-full border-t-2 font-bold p-3 space-y-2">
-          <div className="flex justify-between border-b border-dashed pb-1">
+          <div className="flex justify-between text-2xl border-b border-dashed pb-1">
             <span>合計</span>
-            <span className="text-xl">
+            <span className="text-3xl">
               ￥
               {lastTable
                 ? lastTable.order.reduce(
@@ -205,20 +214,23 @@ export default function CurrentOrder() {
                 : 0}
             </span>
           </div>
-          <div className="flex justify-between border-b border-dashed pb-1">
+          {/* <div className="flex justify-between border-b border-dashed pb-1">
             <span>支払方法</span>
             <span className="text-xl">
-              {(lastTable?.PaymentType ?? (lastTable as any)?.paymentType) === 1
-                ? "金券"
-                : (lastTable?.PaymentType ??
-                    (lastTable as any)?.paymentType) === 2
-                ? "PayPay"
-                : "その他キャッシュレス"}
+              {(() => {
+                const pt = (lastTable?.PaymentType ??
+                  (lastTable as any)?.paymentType) as number | undefined;
+                if (pt === 1) return "金券";
+                if (pt === 2) return "PayPay";
+                if (pt === 3) return "その他キャッシュレス";
+                return "未選択";
+              })()}
             </span>
-          </div>
-          <div className="w-full flex justify-end pt-2">
+          </div> */}
+          {/* ↑なんかうまく表示できなくなっちゃったので消し炭にしてやりました */}
+          <div className="w-full flex justify-end pt-6">
             <button
-              className="bg-amber-600 text-white font-bold py-2 px-4 rounded
+              className="bg-amber-600 text-white font-bold w-full text-2xl py-3 px-4 rounded
                          hover:bg-amber-700 active:bg-amber-800 disabled:opacity-50"
               disabled={!lastTable || saving}
               onClick={handleConfirm}
@@ -228,8 +240,6 @@ export default function CurrentOrder() {
           </div>
         </div>
       </div>
-
-      <div className="h-24" />
     </div>
   );
 }

@@ -26,10 +26,10 @@ export default function Home() {
   return (
     <div className="font-sans flex flex-row min-h-screen">
       <Command />
-      <div className="bg-amber-300 flex flex-col justify-between min-h-screen w-1/4 min-w-60 fixed">
+      <div className="bg-amber-300 flex flex-col justify-between min-h-screen w-1/4 min-w-70 fixed">
         <CurrentOrder />
       </div>
-      <div className="w-1/4 min-w-60"></div>
+      <div className="w-1/4 min-w-70"></div>
       <div className="bg-blue-300 grid max-h-screen w-3/4 min-w-180">
         <ControllPanel />
       </div>

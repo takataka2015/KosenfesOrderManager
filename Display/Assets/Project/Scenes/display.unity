@@ -3129,6 +3129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 996422356}
   - component: {fileID: 996422357}
+  - component: {fileID: 996422358}
   m_Layer: 5
   m_Name: OrderTable
   m_TagString: Untagged
@@ -3175,6 +3176,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 42b448606a5345a41a00764372a85d86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &996422358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996422355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 436d569e92d803842b60ad2cf0d7ec34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   requireTableObject: {fileID: 1003975785}
@@ -3604,7 +3617,7 @@ GameObject:
   - component: {fileID: 1205480051}
   - component: {fileID: 1205480053}
   m_Layer: 5
-  m_Name: HitBox
+  m_Name: CallingHitBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

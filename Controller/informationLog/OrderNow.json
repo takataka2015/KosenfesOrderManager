@@ -1,14 +1,1 @@
-[
-  {
-    "order": [
-      {
-        "flag": 32
-      }
-    ],
-    "serial": 14,
-    "casherId": 1,
-    "receptionTime": 1761784124145,
-    "paymentType": 1,
-    "price": 0
-  }
-]
+[]

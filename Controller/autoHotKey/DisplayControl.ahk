@@ -4,9 +4,9 @@ CoordMode "Mouse", "Screen"
 ClickCoordinates(targetX,targetY){
     MouseGetPos(&mouseX, &mouseY)
     MouseMove(targetX, targetY)
-    Sleep  1
+    WinActivate("ahk_exe KosenfesOrderManager.exe")    
     Click
-    Sleep  1
+    WinActivate("ahk_exe chrome.exe")
     MouseMove(mouseX, mouseY)
 }
 
@@ -48,4 +48,8 @@ ClickCoordinates(targetX,targetY){
 
 0::{
     ClickCoordinates(1500,800)
+}
+
+-::{
+    ClickCoordinates(1800,1000)
 }

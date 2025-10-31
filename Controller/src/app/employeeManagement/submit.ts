@@ -1,6 +1,7 @@
 'use server'; // ★ ファイルの先頭に記述
 
 import EmployeeJson from "../../../informationLog/config/employeeList.json";
+import AttendanceJson from "../../../informationLog/Attendance.json"
 import { TimeCard } from "../../../component/utility/TimeCard";
 import { revalidatePath } from "next/cache";
 
@@ -20,6 +21,32 @@ export async function submitAction(prevState: FormState, formData: FormData): Pr
     const idString = formData.get('employeeId') as string;
     const action = formData.get('action') as string;
     const foundUser = EmployeeJson.data.find((item) => item.id.toString() === idString);
+    let workTime = 0;
+
+    if(foundUser){
+        // 1. AttendanceJson から、見つかったユーザーと同じIDの記録を探す
+    const attendanceRecord = AttendanceJson.find(
+    (record) => record.id === foundUser.id
+    );
+
+    // 2. 勤怠記録が見つかった場合のみ計算
+    if (attendanceRecord) {
+        const logs = attendanceRecord.clockLog; // [176..., 176..., 176...]
+
+        // 3. 2つずつペアにしてループ処理 (i = 0, 2, 4, ...)
+        for (let i = 0; i < logs.length; i += 2) {
+        const clockInTime = logs[i];     // 出勤時刻
+        const clockOutTime = logs[i + 1]; // 退勤時刻
+
+        // 4. 退勤時刻が存在する場合（ペアが揃っている場合）のみ計算
+        // (ログが奇数個で最後の打刻が出勤のみの場合、計算に含めない)
+        if (clockOutTime !== undefined) {
+            // 差（ミリ秒）を workTime に加算
+            workTime += (clockOutTime - clockInTime);
+        }
+    }
+    }
+}
 
     console.log("Server Action ID:", idString);
     console.log("Server Action Action:", action);
@@ -30,7 +57,9 @@ export async function submitAction(prevState: FormState, formData: FormData): Pr
 
     if (action === 'check') {
         console.log("user:", foundUser.name);
-        return { message: `出席番号：${foundUser.id}  名前：${foundUser.name}` };
+        const workMinutes =workTime/(1000*60);
+        const workMinutesFixed = workMinutes.toFixed(1);
+        return { message: `出席番号：${foundUser.id}  名前：${foundUser.name}   労働時間${workMinutesFixed}` };
     }
 
     if (action === 'clock-in') {

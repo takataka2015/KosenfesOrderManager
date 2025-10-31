@@ -5,7 +5,7 @@ import { Menu } from "./format/menu";
 import EmployeeJson from "../../informationLog/config/employeeList.json";
 import { Employee } from "./format/employee";
 import 'reflect-metadata';
-import { plainToInstance } from 'class-transformer';
+//import { plainToInstance } from 'class-transformer';
 
 /**
  * 注文を管理するためのクラス

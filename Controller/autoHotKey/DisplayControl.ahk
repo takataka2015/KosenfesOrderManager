@@ -6,7 +6,6 @@ ClickCoordinates(targetX,targetY){
     MouseMove(targetX, targetY)
     WinActivate("ahk_exe KosenfesOrderManager.exe")    
     Click
-    WinActivate("ahk_exe chrome.exe")
     MouseMove(mouseX, mouseY)
 }
 

@@ -1,16 +1,13 @@
 using TMPro;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CallingTableButton : MonoBehaviour, CustomButton
+public class CallingTableButton : MonoBehaviour, ICustomButton
 {
     public System.Action onClickCallback;
-    TextMeshProUGUI callingnumber;
+    TextMeshProUGUI callingNumber;
     Vector3 baseScale;
 
     GameObject buttonObject;
@@ -21,7 +18,7 @@ public class CallingTableButton : MonoBehaviour, CustomButton
     {
         buttonObject = transform.parent.GetChild(0).gameObject;
         buttonImage = buttonObject.GetComponent<Image>();
-        callingnumber = transform.parent.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+        callingNumber = transform.parent.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
         baseScale = transform.localScale;
         isHover = false;
         onClickCallback = () => Served();
@@ -30,13 +27,13 @@ public class CallingTableButton : MonoBehaviour, CustomButton
 
     public void SetCallingNumber(int serial)
     {
-        callingnumber.text = $"{serial}";
+        callingNumber.text = $"{serial}";
         SetActive();
     }
 
     void Served()
     {
-        callingnumber.text = "";
+        callingNumber.text = "";
         SetInActive();
     }
 

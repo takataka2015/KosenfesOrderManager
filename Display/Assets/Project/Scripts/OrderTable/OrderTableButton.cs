@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class OrderTableButton : MonoBehaviour,CustomButton
+public class OrderTableButton : MonoBehaviour, ICustomButton
 {
     public System.Action onClickCallback;
     [SerializeField] GameObject callingTableObject;
@@ -14,7 +14,7 @@ public class OrderTableButton : MonoBehaviour,CustomButton
     FilePath path;
     Vector3 baseScale;
     int serial;
-    
+
     GameObject buttonObject;
     Image buttonImage;
     bool isHover;
@@ -22,7 +22,7 @@ public class OrderTableButton : MonoBehaviour,CustomButton
     public void Awake()
     {
         path = new();
-        onClickCallback=()=>ClearRequest(serial);
+        onClickCallback = () => ClearRequest(serial);
         buttonObject = transform.parent.GetChild(0).gameObject;
         buttonImage = buttonObject.GetComponent<Image>();
         callingTableButton = callingTableObject.GetComponent<CallingTableButton>();
@@ -40,11 +40,11 @@ public class OrderTableButton : MonoBehaviour,CustomButton
     {
         transform.localScale = Vector3.zero;
     }
-    
+
     public void ClearRequest(int serial)
     {
-        HashSet<int> request=new();
-        JsonUtility.FromJson<SerialJson>(File.ReadAllText(path.Request, System.Text.Encoding.UTF8)).serials.ToList().ForEach(serial=>request.Add(serial));
+        HashSet<int> request = new();
+        JsonUtility.FromJson<SerialJson>(File.ReadAllText(path.Request, System.Text.Encoding.UTF8)).serials.ToList().ForEach(serial => request.Add(serial));
         request.Add(serial);
         File.WriteAllText(path.Request, JsonUtility.ToJson(new SerialJson(request.ToArray())));
         callingTableButton.SetCallingNumber(serial);

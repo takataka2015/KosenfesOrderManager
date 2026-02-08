@@ -1,1 +1,138 @@
-[]
+[
+  {
+    "serial": 38,
+    "casherId": 1,
+    "paymentType": 1,
+    "receptionTime": 1762050503998,
+    "order": [
+      {
+        "flag": 0
+      },
+      {
+        "flag": 0
+      }
+    ],
+    "price": 600,
+    "PaymentType": 0
+  },
+  {
+    "serial": 39,
+    "casherId": 1,
+    "paymentType": 1,
+    "receptionTime": 1762050511389,
+    "order": [
+      {
+        "flag": 1
+      }
+    ],
+    "price": 400,
+    "PaymentType": 0
+  },
+  {
+    "serial": 40,
+    "casherId": 1,
+    "paymentType": 1,
+    "receptionTime": 1762050527886,
+    "order": [
+      {
+        "flag": 5
+      }
+    ],
+    "price": 500,
+    "PaymentType": 0
+  },
+  {
+    "serial": 1,
+    "casherId": 1,
+    "paymentType": 1,
+    "receptionTime": 1762050600686,
+    "order": [
+      {
+        "flag": 32
+      }
+    ],
+    "price": 400,
+    "PaymentType": 0
+  },
+  {
+    "serial": 2,
+    "casherId": 1,
+    "paymentType": 1,
+    "receptionTime": 1762050605031,
+    "order": [
+      {
+        "flag": 0
+      }
+    ],
+    "price": 300,
+    "PaymentType": 0
+  },
+  {
+    "serial": 3,
+    "casherId": 1,
+    "paymentType": 1,
+    "receptionTime": 1762050617840,
+    "order": [
+      {
+        "flag": 0
+      }
+    ],
+    "price": 300,
+    "PaymentType": 0
+  },
+  {
+    "serial": 4,
+    "casherId": 1,
+    "paymentType": 1,
+    "receptionTime": 1762050673674,
+    "order": [
+      {
+        "flag": 0
+      }
+    ],
+    "price": 300,
+    "PaymentType": 1
+  },
+  {
+    "serial": 5,
+    "casherId": 1,
+    "paymentType": 1,
+    "receptionTime": 1762050693886,
+    "order": [
+      {
+        "flag": 32
+      }
+    ],
+    "price": 400,
+    "PaymentType": 0
+  },
+  {
+    "serial": 6,
+    "casherId": 1,
+    "paymentType": 1,
+    "receptionTime": 1762050699349,
+    "order": [
+      {
+        "flag": 0
+      }
+    ],
+    "price": 300,
+    "PaymentType": 0
+  },
+  {
+    "serial": 7,
+    "casherId": 1,
+    "paymentType": 1,
+    "receptionTime": 1762050705109,
+    "order": [
+      {
+        "flag": 0
+      },
+      {
+        "flag": 0
+      }
+    ],
+    "price": 600,
+    "PaymentType": 0
+  }
+]
